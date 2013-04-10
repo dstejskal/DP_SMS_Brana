@@ -47,5 +47,20 @@ public class SMS extends Activity
                         Toast.LENGTH_SHORT).show();
             }
         });        
-    }    
+    }
+    //metoda slouží pro automatické odesílání smsek
+    public void sendSMS (String phone, String text){
+    	  SmsManager sms = SmsManager.getDefault();
+    	
+          if (phone.length()>0 && text.length()>0)                
+              //sendSMS(phoneNo, message);
+              sms.sendTextMessage(phone, "android", text, null, null);
+          //sendTextMessage(String destinationAddress, String scAddress, String text, PendingIntent sentIntent, PendingIntent deliveryIntent)
+          //Send a text based SMS.
+          else
+              Toast.makeText(getBaseContext(), 
+                  "Please enter both phone number and message.", 
+                  Toast.LENGTH_SHORT).show();
+      
+    }
 }
