@@ -52,8 +52,8 @@ public class DataJSONParser {
 
         String text = "";
         String phone="";
+        SmsSender sender=new SmsSender();
 
- 
         try {
 
         	
@@ -62,7 +62,10 @@ public class DataJSONParser {
             
             country.put("text", text);
             country.put("phone", phone);
+            
+            //sender.sendSms("5556", text); //metoda automaticky pøepošle SMS, které naète z DB
 
+            sender.execute("");
  
         } catch (JSONException e) {
             e.printStackTrace();

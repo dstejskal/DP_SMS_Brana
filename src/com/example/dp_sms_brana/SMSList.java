@@ -13,10 +13,12 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-//import android.view.Menu;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+//import android.view.Menu;
 
 public class SMSList extends Activity {
 	 
@@ -61,9 +63,7 @@ public class SMSList extends Activity {
          
             try{
                 //jObject = new JSONObject(strJson[0]);
-                jObject = JSONfunctions.getJSONfromURL("http://dsweb.g6.cz/diplomka/data.php");
-
-                
+                jObject = JSONfunctions.getJSONfromURL("http://dsweb.g6.cz/diplomka/data.php");              
                 DataJSONParser countryJsonParser = new DataJSONParser();
                 countryJsonParser.parse(jObject);
             }catch(Exception e){
@@ -109,5 +109,17 @@ public class SMSList extends Activity {
             /** Setting the adapter containing the country list to listview */
             listView.setAdapter(adapter);
         }
+        
+       /* @Override
+        protected void onPreExecute() {
+           super.onPreExecute();
+           //displayProgressBar("Downloading...");
+           displayProgressBar();
+        }
+        
+        public void displayProgressBar(){
+        	ProgressBar bar=(ProgressBar)findViewById(R.id.progress_bar);
+        	bar.setVisibility(View.VISIBLE); //View.INVISIBLE, or View.GONE to hide it.
+        	}*/
     } 
 }
