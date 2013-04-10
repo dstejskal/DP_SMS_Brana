@@ -49,6 +49,9 @@ public class MainActivity extends Activity {
 		       return true;
 		     case R.id.send:
 		    	 Toast.makeText(MainActivity.this, "Odesílám SMS", Toast.LENGTH_SHORT).show();
+		    	 
+		    	 Intent j = new Intent(this,SMS.class);
+		    	 startActivity(j);
 		       return true;
 		     case R.id.manage:
 		       return true;
