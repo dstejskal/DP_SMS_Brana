@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <!-- Ikony: http://androiddrawableexplorer.appspot.com/ -->
+    
+    <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/download"
+          android:icon="@android:drawable/arrow_down_float"
+          android:title="Stáhnout SMS" />
+ 
+    <item android:id="@+id/send"
+          android:icon="@android:drawable/ic_menu_send"
+          android:title="Odeslat SMS" />
+ 
+    <item android:id="@+id/update"
+          android:icon="@android:drawable/ic_menu_rotate"
+          android:title="Aktualizovat" />
+ 
+    <item android:id="@+id/manage"
+          android:icon="@android:drawable/ic_menu_manage"
+          android:title="Nastavení" />
+ 
+    <item android:id="@+id/save"
+          android:icon="@android:drawable/ic_menu_save"
+          android:title="Uložit" />
+ 
+    <item android:id="@+id/info"
+          android:icon="@android:drawable/ic_dialog_info"
+          android:title="O aplikaci" />
+</menu>
