@@ -13,40 +13,40 @@ public class DataJSONParser {
     /** Receives a JSONObject and returns a list */
     public List<HashMap<String,String>> parse(JSONObject jObject){
  
-        JSONArray jCountries = null;
+        JSONArray jMessages = null;
         try {
             /** Retrieves all the elements in the 'data' array */
-        jCountries = jObject.getJSONArray("data");
+        jMessages = jObject.getJSONArray("data");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         /** Invoking getCountries with the array of json object
         * where each json object represent a country
         */
-        return getCountries(jCountries);
+        return getMessages(jMessages);
     }
  
-    private List<HashMap<String, String>> getCountries(JSONArray jCountries){
-        int countryCount = jCountries.length();
-        List<HashMap<String, String>> countryList = new ArrayList<HashMap<String,String>>();
-        HashMap<String, String> country = null;
+    private List<HashMap<String, String>> getMessages(JSONArray jMessages){
+        int messagesCount = jMessages.length();
+        List<HashMap<String, String>> messagesList = new ArrayList<HashMap<String,String>>();
+        HashMap<String, String> message = null;
  
         /** Taking each country, parses and adds to list object */
-        for(int i=0; i<countryCount;i++){
+        for(int i=0; i<messagesCount;i++){
             try {
                 /** Call getCountry with country JSON object to parse the country */
-                country = getCountry((JSONObject)jCountries.get(i));
-                countryList.add(country);
+                message = getMessages((JSONObject)jMessages.get(i));
+                messagesList.add(message);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
  
-        return countryList;
+        return messagesList;
     }
  
     /** Parsing the Country JSON object */
-    private HashMap<String, String> getCountry(JSONObject jCountry){
+    private HashMap<String, String> getMessages(JSONObject jMessage){
  
         HashMap<String, String> country = new HashMap<String, String>();
 
@@ -57,8 +57,8 @@ public class DataJSONParser {
         try {
 
         	
-            text = jCountry.getString("text");
-            phone = jCountry.getString("phone");
+            text = jMessage.getString("text");
+            phone = jMessage.getString("phone");
             
             country.put("text", text);
             country.put("phone", phone);
