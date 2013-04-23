@@ -13,10 +13,9 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
+//import android.widget.TextView;
 import android.widget.Toast;
 //import android.view.Menu;
 
@@ -53,6 +52,7 @@ public class SMSList extends Activity {
 	    }
 	    return false;
 	}
+
  
     private class ListViewLoaderTask extends AsyncTask<String, Void, SimpleAdapter>{
  
@@ -60,39 +60,48 @@ public class SMSList extends Activity {
         /** Doing the parsing of xml data in a non-ui thread */
         @Override
         protected SimpleAdapter doInBackground(String... strJson) {
+        	
+         //SmsSender sender=new SmsSender();
          
             try{
                 //jObject = new JSONObject(strJson[0]);
                 jObject = JSONfunctions.getJSONfromURL("http://dsweb.g6.cz/diplomka/data.php");              
-                DataJSONParser countryJsonParser = new DataJSONParser();
-                countryJsonParser.parse(jObject);
+                DataJSONParser messagesJsonParser = new DataJSONParser();
+                messagesJsonParser.parse(jObject);
             }catch(Exception e){
                 Log.d("JSON Exception1",e.toString());
             }
  
-            DataJSONParser countryJsonParser = new DataJSONParser();
+            DataJSONParser dataJsonParser = new DataJSONParser();
  
-            List<HashMap<String, String>> countries = null;
+            List<HashMap<String, Object>> message = null;
  
             try{
                 /** Getting the parsed data as a List construct */
-                countries = countryJsonParser.parse(jObject);
+                message = dataJsonParser.parse(jObject);
             }catch(Exception e){
                 Log.d("Exception",e.toString());
             }
  
             /** Keys used in Hashmap */
-            //String[] from = { "country","flag","details"};
-            
-            String[] from = { "text","phone"};
+
+
+            String[] from = {"text","phone"};
  
+
+            //metoda automaticky pøepošle SMS, které naète z DB
+            //sender.execute(from[1],from[0]);
+            
             /** Ids of views in listview_layout */
-            //int[] to = { R.id.tv_country,R.id.iv_flag,R.id.tv_country_details};
+           
+           
+            
+            //int[] to = {R.id.sms_id, R.id.sms_text,R.id.sms_phone};
             int[] to = { R.id.sms_text,R.id.sms_phone};
             /** Instantiating an adapter to store each items
             *  R.layout.listview_layout defines the layout of each item
             */
-            SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), countries, R.layout.lv_layout, from, to);
+            SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), message, R.layout.lv_layout, from, to);
  
             return adapter;
             

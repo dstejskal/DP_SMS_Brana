@@ -8,14 +8,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    
-    <TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="Click on Menu to show Menu Items"
-    android:textSize="20dip"
-    android:textStyle="bold"
-    android:layout_margin="20dip"
-    />
+    <ToggleButton
+        android:id="@+id/toggleButtonDatabase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="ToggleButton"
+        android:textOff="Databáze je odpojená"
+        android:textOn="Databáze je připojená"
+        android:onClick="connectDatabase" />
 
 </RelativeLayout>

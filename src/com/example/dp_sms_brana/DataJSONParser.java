@@ -11,7 +11,7 @@ import org.json.JSONObject;
 public class DataJSONParser {
  
     /** Receives a JSONObject and returns a list */
-    public List<HashMap<String,String>> parse(JSONObject jObject){
+    public List<HashMap<String,Object>> parse(JSONObject jObject){
  
         JSONArray jMessages = null;
         try {
@@ -25,18 +25,21 @@ public class DataJSONParser {
         */
         return getMessages(jMessages);
     }
- 
-    private List<HashMap<String, String>> getMessages(JSONArray jMessages){
+    
+    
+    private List<HashMap<String, Object>> getMessages(JSONArray jMessages){
+    	
         int messagesCount = jMessages.length();
-        List<HashMap<String, String>> messagesList = new ArrayList<HashMap<String,String>>();
-        HashMap<String, String> message = null;
- 
+        List<HashMap<String, Object>> messagesList = new ArrayList<HashMap<String,Object>>();
+        HashMap<String, Object> message = null;
         /** Taking each country, parses and adds to list object */
         for(int i=0; i<messagesCount;i++){
             try {
-                /** Call getCountry with country JSON object to parse the country */
-                message = getMessages((JSONObject)jMessages.get(i));
+                /** Call getMessages with phone JSON object to parse the message */
+            	            	
+            	message = getMessages((JSONObject)jMessages.get(i));                
                 messagesList.add(message);
+                
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -45,31 +48,36 @@ public class DataJSONParser {
         return messagesList;
     }
  
-    /** Parsing the Country JSON object */
-    private HashMap<String, String> getMessages(JSONObject jMessage){
- 
-        HashMap<String, String> country = new HashMap<String, String>();
+    /** Parsing the Message JSON object */
 
+    
+    private HashMap<String, Object> getMessages(JSONObject jMessage){
+    	
+       // HashMap<String, String> message = new HashMap<String, String>();
+    	HashMap<String, Object> message = new HashMap<String, Object>();
+        int id=-1;
         String text = "";
         String phone="";
-        SmsSender sender=new SmsSender();
+        short sent=0;
 
         try {
 
-        	
+            id=jMessage.getInt("id");
+            
             text = jMessage.getString("text");
             phone = jMessage.getString("phone");
             
-            country.put("text", text);
-            country.put("phone", phone);
+            sent =(short)jMessage.getInt("sent"); 
             
-            //sender.sendSms("5556", text); //metoda automaticky pøepošle SMS, které naète z DB
-
-            sender.execute("");
+            message.put("id", id);
+            message.put("text", text);
+            message.put("phone", phone);
+            message.put("sent", sent);
+            
  
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return country;
+        return message;
     }
 }

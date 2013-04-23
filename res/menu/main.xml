@@ -3,13 +3,13 @@
     
     <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/download"
+    <item android:id="@+id/queue"
           android:icon="@android:drawable/arrow_down_float"
-          android:title="Stáhnout SMS" />
+          android:title="Zobrazit Frontu" />
  
     <item android:id="@+id/send"
           android:icon="@android:drawable/ic_menu_send"
-          android:title="Odeslat SMS" />
+          android:title="Nová SMS" />
  
     <item android:id="@+id/update"
           android:icon="@android:drawable/ic_menu_rotate"
@@ -23,7 +23,7 @@
           android:icon="@android:drawable/ic_menu_save"
           android:title="Uložit" />
  
-    <item android:id="@+id/info"
+    <item android:id="@+id/stats"
           android:icon="@android:drawable/ic_dialog_info"
-          android:title="O aplikaci" />
+          android:title="Statistiky" />
 </menu>

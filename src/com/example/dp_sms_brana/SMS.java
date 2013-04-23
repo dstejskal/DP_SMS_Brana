@@ -4,8 +4,6 @@ package com.example.dp_sms_brana;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.view.View;

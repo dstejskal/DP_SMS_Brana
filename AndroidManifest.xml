@@ -34,6 +34,8 @@
         
          <activity android:name=".SMSList" />
          <activity android:name=".SMS" />
+         <activity android:name=".SendSmsToDatabase" />
+         <activity android:name=".Statistics" />
             
     </application>
 
