@@ -44,10 +44,11 @@ public class DBArchiveAdapter extends DBAdapter{
 	{
 		return db.query(TABLE_ARCHIVE, null, COLUMN_ID + "=" + id, null, null, null, null);
 	}
+	
 	/*Vrátí všechny zprávy ze dne date*/
-	public Cursor fetchMessage(String date)
+	public Cursor fetchMessageByDate(String date)
 	{
-		return db.query(TABLE_ARCHIVE, null, COLUMN_DATE + "=" + date, null, null, null, null);
+		return db.query(TABLE_ARCHIVE, null, COLUMN_DATE + "='" + date+"'", null, null, null, null);
 	}
 	
 	public void updateMessage(long id, int mid , String sender,String recipient, String date)

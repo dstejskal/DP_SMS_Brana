@@ -65,7 +65,7 @@ public class SMSList extends Activity {
          
             try{
                 //jObject = new JSONObject(strJson[0]);
-                jObject = JSONfunctions.getJSONfromURL("http://dsweb.g6.cz/diplomka/data.php");              
+                jObject = JSONfunctions.getJSONfromURL("http://dsweb.g6.cz/diplomka/api/data.php");              
                 DataJSONParser messagesJsonParser = new DataJSONParser();
                 messagesJsonParser.parse(jObject);
             }catch(Exception e){

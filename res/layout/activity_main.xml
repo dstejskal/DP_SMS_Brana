@@ -14,9 +14,16 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:onClick="connectDatabase"
         android:text="ToggleButton"
         android:textOff="Databáze je odpojená"
-        android:textOn="Databáze je připojená"
-        android:onClick="connectDatabase" />
+        android:textOn="Databáze je připojená" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+    </RadioGroup>
 
 </RelativeLayout>

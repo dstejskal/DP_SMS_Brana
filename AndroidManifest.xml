@@ -8,15 +8,14 @@
         android:minSdkVersion="4"
         android:targetSdkVersion="16" />
 
-    
     <uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />   
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.WRITE_SMS" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_SERVICE"/>
 
-	
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -31,12 +30,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-         <activity android:name=".SMSList" />
-         <activity android:name=".SMS" />
-         <activity android:name=".SendSmsToDatabase" />
-         <activity android:name=".Statistics" />
-            
+        <activity android:name="com.example.dp_sms_brana.SMSList" />
+        <activity android:name="com.example.dp_sms_brana.SMS" />
+        <activity android:name="com.example.dp_sms_brana.SendSmsToDatabase" />
+        <activity android:name="com.example.dp_sms_brana.Statistics" />
+        <activity android:name="com.example.dp_sms_brana.GenerateData" />
+        <activity
+            android:name="com.example.dp_sms_brana.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name="com.example.dp_sms_brana.Settings"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
 </manifest>

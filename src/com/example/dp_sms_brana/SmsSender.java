@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -65,6 +66,9 @@ public class SmsSender extends AsyncTask<String, Void, String>{
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} 
 		}
 		//return null;
@@ -96,15 +100,15 @@ public class SmsSender extends AsyncTask<String, Void, String>{
 	       
 	    }
 	    
-	    public void sendNewSms(){
+	    public void sendNewSms() throws ParseException{
 	    	
        DatabaseHandler databaseHandler=new DatabaseHandler(this.context);
        
 	   if(ConnectionInfo.isConnected(context)){ //pokud je dostupné pøipojení k internetu, stáhnu nová data
 		   
 	   ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();          
-	   JSONObject json = JSONfunctions.getJSONfromURL("http://dsweb.g6.cz/diplomka/data.php");
-	   
+	   //JSONObject json = JSONfunctions.getJSONfromURL("http://dsweb.g6.cz/diplomka/data.php");
+	   JSONObject json = JSONfunctions.getJSONfromURL("http://dsweb.g6.cz/diplomka/api/data.php");
        try{
        	
        	JSONArray  messages = json.getJSONArray("data");
@@ -122,17 +126,15 @@ public class SmsSender extends AsyncTask<String, Void, String>{
 	        	
 	    		//odstranìní diakritiky, problém s èeštinou na emulátorech, nevím jak v reálné aplikaci
 	    		//funkce normalize az od API 9!
-	    		String normalized = Normalizer.normalize(e.getString("text"), Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+	    		String normalizedText=removeDiacritics(e.getString("text"));
+	        	//String normalized = Normalizer.normalize(e.getString("text"), Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
 	    		
-	    		sendSms(e.getString("phone"), normalized);
-	    		//sendSms("5554", normalized);
-	    		//update statusu=> sent=1, update timestamp
+	    		sendSms(e.getString("phone"), normalizedText);
 	    		updateSmsStatus(e.getInt("id"));
 	    		
-	    		message=new content.Message((long)e.getInt("id"), (long)e.getInt("id"), "sender", e.getString("phone"), "1.1.2013", e.getString("text"), this.context);	    		
-	    		databaseHandler.saveMessage(message); //vložení do SQLite
-	    		
-	        	mylist.add(map);
+	    		message=new content.Message((long)e.getInt("id"), (long)e.getInt("id"), "sender", e.getString("phone"), CalendarFunctions.now(), e.getString("text"), this.context);	    	    		
+	    		databaseHandler.saveMessage(message); //vložení do SQLite	    			    			        	
+	    		mylist.add(map);
 			}
        
 	        sending=false;
@@ -158,7 +160,7 @@ public class SmsSender extends AsyncTask<String, Void, String>{
 		//http post
 		try{
 		        HttpClient httpclient = new DefaultHttpClient();
-		        HttpPost httppost = new HttpPost("http://dsweb.g6.cz/diplomka/update-sms-status.php");
+		        HttpPost httppost = new HttpPost("http://dsweb.g6.cz/diplomka/api/update-sms-status.php");
 		        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 		        HttpResponse response = httpclient.execute(httppost);
 		        HttpEntity entity = response.getEntity();
@@ -184,9 +186,12 @@ public class SmsSender extends AsyncTask<String, Void, String>{
 	}
 
 	
-	public void onPostExecute() {
-
-       
+	public void onPostExecute() {    
 	}
+	
+	
+	public static String removeDiacritics(String s) {
+		return Normalizer.normalize(s, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+		}
 
 }

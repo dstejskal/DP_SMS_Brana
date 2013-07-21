@@ -1,6 +1,7 @@
 package com.example.dp_sms_brana;
 
 
+import java.text.ParseException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -11,11 +12,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.dp_sms_brana.database.DatabaseHandler;
 
-import content.Message;
 
 public class MainActivity extends Activity implements Observer {
 	
@@ -28,6 +29,16 @@ public class MainActivity extends Activity implements Observer {
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.activity_main); 
 	        
+	        //obnovení stavu po pøeklopení displeje
+	        restoreMe(savedInstanceState);
+	        
+	        try {
+				//Ranges.getDaysFromInterval("1.4.2013", "05.04.2013");
+				CalendarFunctions.getDaysFromBeginOfMonth("05.04.2013");
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	        /*Test SQLite databáze*/
 	       
 	       DatabaseHandler databaseHandler =new DatabaseHandler(getApplicationContext()); 
@@ -47,9 +58,6 @@ public class MainActivity extends Activity implements Observer {
 	
 	    		 Toast.makeText(MainActivity.this, "Odpojuji databázi", Toast.LENGTH_SHORT).show();
 	    		 running=false;
-	    		 
-
-//	    	 	 Toast.makeText(MainActivity.this, "Databáze byla odpojena", Toast.LENGTH_SHORT).show(); 
 
 	    	 }
 	    	
@@ -75,11 +83,14 @@ public class MainActivity extends Activity implements Observer {
 	        switch (item.getItemId())
 	        {
 		     case R.id.queue:
-		    	 Toast.makeText(MainActivity.this, "Stáhnout data", Toast.LENGTH_SHORT).show();
+		    	 Toast.makeText(MainActivity.this, "Nahrávám data", Toast.LENGTH_SHORT).show();
 		    	 Intent i = new Intent(this,SMSList.class);
 		    	 startActivity(i);
 		       return true;
 		     case R.id.save:
+		    	 Intent generator = new Intent(this,GenerateData.class);
+		    	 startActivity(generator);
+		    	//startGraphActivity(SimpleGraph.class);
 		       return true;
 		     case R.id.send:
 		    	 /*Odeslání pøes GSM bránu*/
@@ -93,6 +104,8 @@ public class MainActivity extends Activity implements Observer {
 		    	 startActivity(smstodb);		    	 
 		       return true;
 		     case R.id.manage:
+		    	 Intent settings = new Intent(this,Settings.class);
+		    	 startActivity(settings);
 		       return true;
 		     case R.id.update:
 		    	 //SmsSender sender=new SmsSender();
@@ -101,9 +114,9 @@ public class MainActivity extends Activity implements Observer {
 		    	 
 		       return true;
 		     case R.id.stats:
-		    	 Toast.makeText(MainActivity.this, "SMS brána 1.0", Toast.LENGTH_SHORT).show();
-		    	 Intent statistics=new Intent (this,Statistics.class);
-		    	 startActivity(statistics);
+		    	 Intent graph = new Intent(this,Statistics.class);
+		    	 graph.putExtra("type", "line");
+		    	 startActivity(graph);
   	 
 		       return true;
 		       
@@ -121,6 +134,25 @@ public class MainActivity extends Activity implements Observer {
 			
 			
 		}
+
+//uložení stavu po pøeklopení displeje
+@Override
+protected void onSaveInstanceState(Bundle outState) {
+	// TODO Auto-generated method stub
+	super.onSaveInstanceState(outState);
+	outState.putBoolean("connected", running);
+}
+
+//obnovení stavu po pøeklopení displeje
+private void restoreMe(Bundle state){
+	if(state!=null){
+	running=state.getBoolean("connected");	
+	}
+	
+}
+	
+	
+}
 	    
 
-}
+

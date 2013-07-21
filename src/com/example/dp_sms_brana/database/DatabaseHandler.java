@@ -67,7 +67,43 @@ return count;
 public ArrayList<Message> getMessagesOfDay(String date){
 	
 	dBArchiveAdapter.open();	
-	Cursor cursor=dBArchiveAdapter.fetchMessage(date);
+	Cursor cursor=dBArchiveAdapter.fetchMessageByDate(date);
+	Message message=null;
+	ArrayList<Message> messageList=null;
+	if (cursor != null && cursor.getCount() != 0)
+	{		
+		cursor.moveToFirst();
+		messageList=new ArrayList<Message>();
+		
+		while(!cursor.isAfterLast()){
+			message = createMessageFromCursor(cursor);
+			messageList.add(message);
+			cursor.moveToNext();
+		}
+
+
+		cursor.close();
+	}
+	
+	dBArchiveAdapter.close();
+	return messageList;	
+	
+}
+
+public int getCountMessagesOfDay(String date){
+	int count=0;
+	dBArchiveAdapter.open();	
+	Cursor cursor=dBArchiveAdapter.fetchMessageByDate(date);
+	count=cursor.getCount();
+	cursor.close();
+	dBArchiveAdapter.close();
+	return count;		
+}
+
+public ArrayList<Message> getAllMessages(){
+	
+	dBArchiveAdapter.open();	
+	Cursor cursor=dBArchiveAdapter.getAllMessages();
 	Message message=null;
 	ArrayList<Message> messageList=null;
 	if (cursor != null && cursor.getCount() != 0)

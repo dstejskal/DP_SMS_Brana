@@ -2,5 +2,6 @@
 <lint>
     <issue id="NewApi">
         <ignore path="src\com\example\dp_sms_brana\SmsSender.java" />
+        <ignore path="src\com\example\dp_sms_brana\Statistics.java" />
     </issue>
 </lint>
