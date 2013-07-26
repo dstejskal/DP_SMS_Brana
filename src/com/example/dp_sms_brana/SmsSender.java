@@ -58,10 +58,11 @@ public class SmsSender extends AsyncTask<String, Void, String>{
 	    	
 	    	if(sending==false) //pokud již neodesílám zprávy, zkontroluji, zda nejsou ve frontì nové
 	    	{	
-	    	sendNewSms(); //odeslání nových sms stažených pøes JSON, kontrola nových sms každých 30 vteøin.
+	    	sendNewSms(); //odeslání nových sms stažených pøes JSON, kontrola nových sms každých x vteøin dle nastavení uživatele.
 	    	}
 	    	
-		    int timeSinceLastUpdate = 1000*30; //uspání vlákna na 30 vteøin
+		    //int timeSinceLastUpdate = 1000*30; //uspání vlákna na 30 vteøin
+	    	int timeSinceLastUpdate = 1000*SettingsActivity.getInterval(this.context); //uspání vlákna na x vteøin
 			Thread.sleep(timeSinceLastUpdate);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -107,8 +108,9 @@ public class SmsSender extends AsyncTask<String, Void, String>{
 	   if(ConnectionInfo.isConnected(context)){ //pokud je dostupné pøipojení k internetu, stáhnu nová data
 		   
 	   ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();          
-	   //JSONObject json = JSONfunctions.getJSONfromURL("http://dsweb.g6.cz/diplomka/data.php");
-	   JSONObject json = JSONfunctions.getJSONfromURL("http://dsweb.g6.cz/diplomka/api/data.php");
+
+	   //JSONObject json = JSONfunctions.getJSONfromURL("http://dsweb.g6.cz/diplomka/api/data.php");
+	   JSONObject json = JSONfunctions.getJSONfromURL(SettingsActivity.getApiData(this.context));
        try{
        	
        	JSONArray  messages = json.getJSONArray("data");
@@ -160,7 +162,8 @@ public class SmsSender extends AsyncTask<String, Void, String>{
 		//http post
 		try{
 		        HttpClient httpclient = new DefaultHttpClient();
-		        HttpPost httppost = new HttpPost("http://dsweb.g6.cz/diplomka/api/update-sms-status.php");
+		        //HttpPost httppost = new HttpPost("http://dsweb.g6.cz/diplomka/api/update-sms-status.php");
+		        HttpPost httppost = new HttpPost(SettingsActivity.getApiStatus(this.context));
 		        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 		        HttpResponse response = httpclient.execute(httppost);
 		        HttpEntity entity = response.getEntity();

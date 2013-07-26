@@ -17,6 +17,8 @@ public class Database extends SQLiteOpenHelper{
 	@Override
 	public void onCreate(SQLiteDatabase database) {
 		database.execSQL(DBArchiveAdapter.DATABASE_CREATE_ARCHIVE_TABLE);
+		//pøidana tabulka settings - udrzuje nastaveni aplikace
+		database.execSQL(DBSettingsAdapter.DATABASE_CREATE_SETTINGS_TABLE);
 		
 	}
 	@Override
@@ -24,6 +26,8 @@ public class Database extends SQLiteOpenHelper{
 	Log.w(Database.class.getName(), "Aktualizuji databázi z verze " + oldVersion + " na " + newVersion
 				+ ", stará data budou smazána");
 	db.execSQL("DROP TABLE IF EXISTS " + DBArchiveAdapter.TABLE_ARCHIVE);
+	//pøidana tabulka settings - udrzuje nastaveni aplikace
+	db.execSQL("DROP TABLE IF EXISTS " + DBSettingsAdapter.TABLE_SETTINGS);
 		
 	onCreate(db);	
 	}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/nastaveni" >
+
+    <EditTextPreference
+        android:key="interval"
+        android:summary="@string/intervalDesc"
+        android:title="@string/interval" 
+        android:defaultValue="5"/>"
+
+   <EditTextPreference
+        android:key="apiData"
+        android:summary="@string/urlDesc"
+        android:title="@string/apiData" 
+        android:defaultValue="http://dsweb.g6.cz/diplomka/api/data.php"/>
+   
+    <EditTextPreference
+        android:key="apiSend"
+        android:summary="@string/urlDesc"
+        android:title="@string/apiSend" 
+        android:defaultValue="http://dsweb.g6.cz/diplomka/api/send-sms.php"/>
+      
+    <EditTextPreference
+        android:key="apiStatus"
+        android:summary="@string/urlDesc"
+        android:title="@string/apiStatus" 
+        android:defaultValue="http://dsweb.g6.cz/diplomka/api/update-sms-status.php"/>
+</PreferenceScreen>

@@ -104,8 +104,11 @@ public class MainActivity extends Activity implements Observer {
 		    	 startActivity(smstodb);		    	 
 		       return true;
 		     case R.id.manage:
-		    	 Intent settings = new Intent(this,Settings.class);
-		    	 startActivity(settings);
+		    	 //Intent settings = new Intent(this,Settings.class);
+		    	 //startActivity(settings);
+		    	 
+		    	 Intent settingsActivity = new Intent(this,SettingsActivity.class);
+		    	 startActivity(settingsActivity);
 		       return true;
 		     case R.id.update:
 		    	 //SmsSender sender=new SmsSender();

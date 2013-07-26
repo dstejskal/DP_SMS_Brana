@@ -4,5 +4,13 @@
     <string name="app_name">DP_SMS_Brana</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    
+    <string name="nastaveni">Nastavení aplikace</string>
+    <string name="interval">Interval stahování zpráv [s]</string>
+    <string name="intervalDesc">Zadejte celé číslo</string>
+    <string name="apiData">Adresa API poskytující data</string>
+    <string name="urlDesc">Zadejte kompletní URL</string>
+    <string name="apiSend">Adresa API pro odesílání SMS</string>
+    <string name="apiStatus">Adresa API pro aktualizaci stavu SMS</string>
 
 </resources>

@@ -20,6 +20,8 @@ import android.widget.Toast;
 //import android.view.Menu;
 
 public class SMSList extends Activity {
+	
+
 	 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,47 +66,42 @@ public class SMSList extends Activity {
          //SmsSender sender=new SmsSender();
          
             try{
-                //jObject = new JSONObject(strJson[0]);
-                jObject = JSONfunctions.getJSONfromURL("http://dsweb.g6.cz/diplomka/api/data.php");              
+                //jObject = JSONfunctions.getJSONfromURL("http://dsweb.g6.cz/diplomka/api/data.php");      
+            	//adresu naèteme pomocí sdílených hodnot nastaveení aplikace
+            	jObject = JSONfunctions.getJSONfromURL(SettingsActivity.getApiData(getApplicationContext()));    
                 DataJSONParser messagesJsonParser = new DataJSONParser();
                 messagesJsonParser.parse(jObject);
             }catch(Exception e){
-                Log.d("JSON Exception1",e.toString());
+ //               Log.d("JSON Exception1",e.toString());  
+           	 Toast.makeText(SMSList.this, "Adresa pro stažení dat je nedostupná!.", Toast.LENGTH_SHORT).show(); 
+           	 return null;
             }
  
             DataJSONParser dataJsonParser = new DataJSONParser();
- 
             List<HashMap<String, Object>> message = null;
  
             try{
                 /** Getting the parsed data as a List construct */
                 message = dataJsonParser.parse(jObject);
+                
+                /** Keys used in Hashmap */
+
+                String[] from = {"text","phone"};
+                //metoda automaticky pøepošle SMS, které naète z DB
+                int[] to = { R.id.sms_text,R.id.sms_phone};
+                /** Instantiating an adapter to store each items
+                *  R.layout.listview_layout defines the layout of each item
+                */
+                SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), message, R.layout.lv_layout, from, to);
+                return adapter;    
+                
             }catch(Exception e){
                 Log.d("Exception",e.toString());
+                Toast.makeText(SMSList.this, "Adresa pro stažení dat je nedostupná2!.", Toast.LENGTH_SHORT).show(); 
+                return null;
             }
  
-            /** Keys used in Hashmap */
-
-
-            String[] from = {"text","phone"};
- 
-
-            //metoda automaticky pøepošle SMS, které naète z DB
-            //sender.execute(from[1],from[0]);
-            
-            /** Ids of views in listview_layout */
-           
-           
-            
-            //int[] to = {R.id.sms_id, R.id.sms_text,R.id.sms_phone};
-            int[] to = { R.id.sms_text,R.id.sms_phone};
-            /** Instantiating an adapter to store each items
-            *  R.layout.listview_layout defines the layout of each item
-            */
-            SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), message, R.layout.lv_layout, from, to);
- 
-            return adapter;
-            
+       
         }
  
         /** Invoked by the Android system on "doInBackground" is executed completely */

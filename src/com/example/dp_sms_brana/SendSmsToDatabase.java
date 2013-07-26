@@ -73,7 +73,8 @@ public class SendSmsToDatabase extends Activity {
 		//http post
 		try{
 		        HttpClient httpclient = new DefaultHttpClient();
-		        HttpPost httppost = new HttpPost("http://dsweb.g6.cz/diplomka/api/send-sms.php");
+		        //HttpPost httppost = new HttpPost("http://dsweb.g6.cz/diplomka/api/send-sms.php");
+		        HttpPost httppost = new HttpPost(SettingsActivity.getApiSend(getApplicationContext()));
 		        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 		        HttpResponse response = httpclient.execute(httppost);
 		        HttpEntity entity = response.getEntity();

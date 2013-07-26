@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.database.Cursor;
 import content.Message;
+import content.UserSettings;
 
 public class DatabaseHandler {
 
 private DBArchiveAdapter dBArchiveAdapter;
+private DBSettingsAdapter dBSettingsAdapter;
 
 private Context context;
 
@@ -16,6 +18,8 @@ public DatabaseHandler(Context context)
 {
 	this.context = context;
 	dBArchiveAdapter = new DBArchiveAdapter(context);
+	//nova tabulka kvuli nastaveni
+	dBSettingsAdapter = new DBSettingsAdapter(context);
 }
 
 public void deleteMessage(Message message){
@@ -24,16 +28,35 @@ public void deleteMessage(Message message){
 	dBArchiveAdapter.close();
 }
 
+public void deleteSettings(UserSettings settings){
+	dBSettingsAdapter.open();
+	dBSettingsAdapter.deleteSettings(settings.getId());
+	dBSettingsAdapter.close();
+}
+
 public void updateMessage(Message message){
 	dBArchiveAdapter.open();
 	dBArchiveAdapter.insertMessage(message.get_id(), message.getSender(), message.getRecipient(), message.getDate());
 	dBArchiveAdapter.close();	
 }
 
+public void updateSettings(UserSettings  settings){
+	dBSettingsAdapter.open();
+	dBSettingsAdapter.insertSettings(settings.getInterval(), settings.getApiData(), settings.getApiSend(), settings.getApiStatus());
+	dBSettingsAdapter.close();	
+}
+
 public long saveMessage(Message message){
 	dBArchiveAdapter.open();
 	long id=dBArchiveAdapter.insertMessage(message.getMid(), message.getSender(), message.getRecipient(), message.getDate());
 	dBArchiveAdapter.close();
+	return id;
+}
+
+public long saveSettings(UserSettings settings){
+	dBSettingsAdapter.open();
+	long id=dBSettingsAdapter.insertSettings(settings.getInterval(), settings.getApiData(), settings.getApiSend(), settings.getApiStatus());
+	dBSettingsAdapter.close();
 	return id;
 }
 
@@ -53,6 +76,24 @@ public Message getMessage(long id)
 	
 	dBArchiveAdapter.close();
 	return message;
+}
+
+public UserSettings getSettings(long id)
+{
+	dBSettingsAdapter.open();	
+	Cursor cursor=dBSettingsAdapter.fetchSettings(id);
+	UserSettings settings=null;
+	
+	if (cursor != null && cursor.getCount() != 0)
+	{
+		cursor.moveToFirst();
+		settings = createSettingsFromCursor(cursor);
+
+		cursor.close();
+	}
+	
+	dBArchiveAdapter.close();
+	return settings;	
 }
 
 public int getMessagesCount(){
@@ -138,6 +179,19 @@ private Message createMessageFromCursor(Cursor cursor)
 			context
 			);
 	return message;
+}
+
+private UserSettings createSettingsFromCursor(Cursor cursor)
+{
+	UserSettings settings = new UserSettings(
+			cursor.getLong(cursor.getColumnIndex(DBSettingsAdapter.COLUMN_ID)),
+			cursor.getInt(cursor.getColumnIndex(DBSettingsAdapter.COLUMN_INTERVAL)),
+			cursor.getString(cursor.getColumnIndex(DBSettingsAdapter.COLUMN_API_DATA)),
+			cursor.getString(cursor.getColumnIndex(DBSettingsAdapter.COLUMN_API_SEND)),
+			cursor.getString(cursor.getColumnIndex(DBSettingsAdapter.COLUMN_API_STATUS)), 
+			context
+			);
+	return settings;
 }
 
 }
