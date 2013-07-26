@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.Normalizer;
-import java.text.Normalizer.Form;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,10 +78,7 @@ public class SmsSender extends AsyncTask<String, Void, String>{
 	    public void sendSms(String phone,String message)
 	    {
 	        SmsManager manager = SmsManager.getDefault();
-
-	        //PendingIntent piSend = PendingIntent.getBroadcast(this, 0, new Intent(SMS_SENT), 0);
-	        //PendingIntent piDelivered = PendingIntent.getBroadcast(this, 0, new Intent(SMS_DELIVERED), 0);
-	    
+	        
 	                int length = message.length();
 
 	                if(length > MAX_SMS_MESSAGE_LENGTH)
@@ -111,6 +107,11 @@ public class SmsSender extends AsyncTask<String, Void, String>{
 
 	   //JSONObject json = JSONfunctions.getJSONfromURL("http://dsweb.g6.cz/diplomka/api/data.php");
 	   JSONObject json = JSONfunctions.getJSONfromURL(SettingsActivity.getApiData(this.context));
+	   
+	   if (json==null) {
+	  //špatný formát dat! dodìlat chybovou hlášku
+	   return;   
+	   }
        try{
        	
        	JSONArray  messages = json.getJSONArray("data");

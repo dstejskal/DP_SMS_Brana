@@ -41,9 +41,9 @@ public class MainActivity extends Activity implements Observer {
 			}
 	        /*Test SQLite databáze*/
 	       
-	       DatabaseHandler databaseHandler =new DatabaseHandler(getApplicationContext()); 
-	       //Toast.makeText(MainActivity.this, "Výpis z SQLite "+databaseHandler.getMessage(5).getMid(), Toast.LENGTH_SHORT).show();
-	       Toast.makeText(MainActivity.this, "Poèet odeslaných SMS: "+ Integer.toString(databaseHandler.getMessagesCount()), Toast.LENGTH_SHORT).show(); 
+	       DatabaseHandler databaseHandler =new DatabaseHandler(getApplicationContext()); 	      
+	       //Toast.makeText(MainActivity.this, "Poèet odeslaných SMS: "+ Integer.toString(databaseHandler.getMessagesCount()), Toast.LENGTH_SHORT).show();
+	       Toast.makeText(MainActivity.this, "Pro další nabídku stisknìte menu ", Toast.LENGTH_LONG).show(); 
 	    }
 	    public void connectDatabase (View toogleDatabase){
 	    	

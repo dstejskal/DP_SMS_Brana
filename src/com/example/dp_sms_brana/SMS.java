@@ -46,7 +46,7 @@ public class SMS extends Activity
                 //Send a text based SMS.
                 else
                     Toast.makeText(getBaseContext(), 
-                        "Please enter both phone number and message.", 
+                        "Zadejte prosím èíslo pøíjemce a text zprávy.", 
                         Toast.LENGTH_SHORT).show();
             }
         });        

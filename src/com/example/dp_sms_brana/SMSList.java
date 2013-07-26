@@ -7,6 +7,7 @@ import java.util.List;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -15,13 +16,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-//import android.widget.TextView;
 import android.widget.Toast;
+import android.app.AlertDialog;
+//import android.widget.TextView;
 //import android.view.Menu;
 
 public class SMSList extends Activity {
-	
-
 	 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,11 @@ public class SMSList extends Activity {
         //listViewLoaderTask.execute(strJson);
         
         if(isConnected(getApplicationContext())){ //pokud je telefon pøipojen k internetu, stáhnu data
+        try{
         listViewLoaderTask.execute();
+        }catch (Exception e){
+        	 listViewLoaderTask.cancel(true);
+        }
         }else{       	
         Toast.makeText(SMSList.this, "Pro stažení dat je nutné pøipojení k INTERNETU.", Toast.LENGTH_SHORT).show(); 
         }
@@ -62,7 +66,7 @@ public class SMSList extends Activity {
         /** Doing the parsing of xml data in a non-ui thread */
         @Override
         protected SimpleAdapter doInBackground(String... strJson) {
-        	
+        	SimpleAdapter adapter=null;
          //SmsSender sender=new SmsSender();
          
             try{
@@ -70,11 +74,13 @@ public class SMSList extends Activity {
             	//adresu naèteme pomocí sdílených hodnot nastaveení aplikace
             	jObject = JSONfunctions.getJSONfromURL(SettingsActivity.getApiData(getApplicationContext()));    
                 DataJSONParser messagesJsonParser = new DataJSONParser();
+                if (jObject==null){       	
+                	return adapter;
+                }else
                 messagesJsonParser.parse(jObject);
             }catch(Exception e){
  //               Log.d("JSON Exception1",e.toString());  
-           	 Toast.makeText(SMSList.this, "Adresa pro stažení dat je nedostupná!.", Toast.LENGTH_SHORT).show(); 
-           	 return null;
+           	 return adapter;
             }
  
             DataJSONParser dataJsonParser = new DataJSONParser();
@@ -92,26 +98,29 @@ public class SMSList extends Activity {
                 /** Instantiating an adapter to store each items
                 *  R.layout.listview_layout defines the layout of each item
                 */
-                SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), message, R.layout.lv_layout, from, to);
+                adapter = new SimpleAdapter(getBaseContext(), message, R.layout.lv_layout, from, to);
                 return adapter;    
                 
             }catch(Exception e){
-                Log.d("Exception",e.toString());
-                Toast.makeText(SMSList.this, "Adresa pro stažení dat je nedostupná2!.", Toast.LENGTH_SHORT).show(); 
+                Log.d("Exception",e.toString());                
+                //zde program vrátí null, pokud je chybný formát dat        
                 return null;
-            }
- 
-       
+            }       
         }
- 
+        
+
         /** Invoked by the Android system on "doInBackground" is executed completely */
         /** This will be executed in ui thread */
         @Override
         protected void onPostExecute(SimpleAdapter adapter) {
+        	
              
             /** Getting a reference to listview of main.xml layout file */
             ListView listView = ( ListView ) findViewById(R.id.lv_countries);
  
+            if (listView==null){
+            	Toast.makeText(SMSList.this, "Adresa pro stažení dat je nedostupná!.", Toast.LENGTH_SHORT).show(); 
+            }else
             /** Setting the adapter containing the country list to listview */
             listView.setAdapter(adapter);
         }
