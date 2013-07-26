@@ -6,13 +6,15 @@ import java.util.Observable;
 import java.util.Observer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dp_sms_brana.database.DatabaseHandler;
@@ -87,7 +89,7 @@ public class MainActivity extends Activity implements Observer {
 		    	 Intent i = new Intent(this,SMSList.class);
 		    	 startActivity(i);
 		       return true;
-		     case R.id.save:
+		     case R.id.generate:
 		    	 Intent generator = new Intent(this,GenerateData.class);
 		    	 startActivity(generator);
 		    	//startGraphActivity(SimpleGraph.class);
@@ -110,11 +112,14 @@ public class MainActivity extends Activity implements Observer {
 		    	 Intent settingsActivity = new Intent(this,SettingsActivity.class);
 		    	 startActivity(settingsActivity);
 		       return true;
-		     case R.id.update:
-		    	 //SmsSender sender=new SmsSender();
-		    	 sender.execute("");
-		    	 Toast.makeText(MainActivity.this, "Pøipojuji se k databázi", Toast.LENGTH_SHORT).show();
-		    	 
+		     case R.id.info:
+		    	    AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+		    	    TextView myMsg = new TextView(this);	    	  
+		    	    myMsg.setText("Autor: Bc. Drahoslav Stejskal,\n diplomová práce\n Univerzita Pardubice\n 2013\n\n" +
+		    	    		"webové rozhraní: www.dsweb.g6.cz/diplomka");
+		    	    myMsg.setGravity(Gravity.CENTER_HORIZONTAL);
+		    	    alertDialog.setView(myMsg);
+	                alertDialog.show();  	 
 		       return true;
 		     case R.id.stats:
 		    	 Intent graph = new Intent(this,Statistics.class);
