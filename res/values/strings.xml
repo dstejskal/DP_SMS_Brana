@@ -12,5 +12,15 @@
     <string name="urlDesc">Zadejte kompletní URL</string>
     <string name="apiSend">Adresa API pro odesílání SMS</string>
     <string name="apiStatus">Adresa API pro aktualizaci stavu SMS</string>
+    <string name="interval_prompt">Vyberte časový úsek</string>
+    
+    <string-array name="interval_array">
+    <item>Den</item>
+    <item>Týden</item>
+    <item>Dva týdny</item>
+    <item>Měsíc</item>
+    <item>Vše</item>
+    </string-array>
+    
 
 </resources>

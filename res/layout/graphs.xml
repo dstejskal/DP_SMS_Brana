@@ -6,7 +6,14 @@
 		android:orientation="vertical"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent">
-		
+	    
+	    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/interval_array"
+        android:prompt="@string/interval_prompt" />	
+        
 	    <TextView
         android:id="@+id/countSms"
         android:layout_width="wrap_content"

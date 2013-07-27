@@ -9,10 +9,11 @@ package com.example.dp_sms_brana;
 
 public final class R {
     public static final class array {
-        public static final int pref_example_list_titles=0x7f070000;
-        public static final int pref_example_list_values=0x7f070001;
-        public static final int pref_sync_frequency_titles=0x7f070002;
-        public static final int pref_sync_frequency_values=0x7f070003;
+        public static final int interval_array=0x7f070000;
+        public static final int pref_example_list_titles=0x7f070001;
+        public static final int pref_example_list_values=0x7f070002;
+        public static final int pref_sync_frequency_titles=0x7f070003;
+        public static final int pref_sync_frequency_values=0x7f070004;
     }
     public static final class attr {
     }
@@ -30,23 +31,24 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a0010;
-        public static final int btnSendSMS=0x7f0a0009;
-        public static final int countSms=0x7f0a0002;
-        public static final int generate=0x7f0a000d;
-        public static final int graph1=0x7f0a0003;
-        public static final int info=0x7f0a000f;
-        public static final int lv_countries=0x7f0a0006;
-        public static final int manage=0x7f0a000c;
-        public static final int queue=0x7f0a000a;
+        public static final int action_settings=0x7f0a0011;
+        public static final int btnSendSMS=0x7f0a000a;
+        public static final int countSms=0x7f0a0003;
+        public static final int generate=0x7f0a000e;
+        public static final int graph1=0x7f0a0004;
+        public static final int info=0x7f0a0010;
+        public static final int lv_countries=0x7f0a0007;
+        public static final int manage=0x7f0a000d;
+        public static final int queue=0x7f0a000b;
         public static final int radioGroup1=0x7f0a0001;
-        public static final int send=0x7f0a000b;
-        public static final int sms_phone=0x7f0a0004;
-        public static final int sms_text=0x7f0a0005;
-        public static final int stats=0x7f0a000e;
+        public static final int send=0x7f0a000c;
+        public static final int sms_phone=0x7f0a0005;
+        public static final int sms_text=0x7f0a0006;
+        public static final int spinner1=0x7f0a0002;
+        public static final int stats=0x7f0a000f;
         public static final int toggleButtonDatabase=0x7f0a0000;
-        public static final int txtMessage=0x7f0a0008;
-        public static final int txtPhoneNo=0x7f0a0007;
+        public static final int txtMessage=0x7f0a0009;
+        public static final int txtPhoneNo=0x7f0a0008;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -69,29 +71,30 @@ public final class R {
         public static final int hello_world=0x7f060002;
         public static final int interval=0x7f060004;
         public static final int intervalDesc=0x7f060005;
+        public static final int interval_prompt=0x7f06000a;
         public static final int nastaveni=0x7f060003;
-        public static final int pref_default_display_name=0x7f06000f;
-        public static final int pref_description_social_recommendations=0x7f06000d;
+        public static final int pref_default_display_name=0x7f060010;
+        public static final int pref_description_social_recommendations=0x7f06000e;
         /**  Example settings for Data & Sync 
          */
-        public static final int pref_header_data_sync=0x7f060011;
+        public static final int pref_header_data_sync=0x7f060012;
         /**  Strings related to Settings 
  Example General settings 
          */
-        public static final int pref_header_general=0x7f06000b;
+        public static final int pref_header_general=0x7f06000c;
         /**  Example settings for Notifications 
          */
-        public static final int pref_header_notifications=0x7f060014;
-        public static final int pref_ringtone_silent=0x7f060017;
-        public static final int pref_title_add_friends_to_messages=0x7f060010;
-        public static final int pref_title_display_name=0x7f06000e;
-        public static final int pref_title_new_message_notifications=0x7f060015;
-        public static final int pref_title_ringtone=0x7f060016;
-        public static final int pref_title_social_recommendations=0x7f06000c;
-        public static final int pref_title_sync_frequency=0x7f060012;
-        public static final int pref_title_system_sync_settings=0x7f060013;
-        public static final int pref_title_vibrate=0x7f060018;
-        public static final int title_activity_settings=0x7f06000a;
+        public static final int pref_header_notifications=0x7f060015;
+        public static final int pref_ringtone_silent=0x7f060018;
+        public static final int pref_title_add_friends_to_messages=0x7f060011;
+        public static final int pref_title_display_name=0x7f06000f;
+        public static final int pref_title_new_message_notifications=0x7f060016;
+        public static final int pref_title_ringtone=0x7f060017;
+        public static final int pref_title_social_recommendations=0x7f06000d;
+        public static final int pref_title_sync_frequency=0x7f060013;
+        public static final int pref_title_system_sync_settings=0x7f060014;
+        public static final int pref_title_vibrate=0x7f060019;
+        public static final int title_activity_settings=0x7f06000b;
         public static final int urlDesc=0x7f060007;
     }
     public static final class style {

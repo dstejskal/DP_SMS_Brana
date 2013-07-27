@@ -10,8 +10,13 @@ import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dp_sms_brana.database.DatabaseHandler;
 import com.jjoe64.graphview.BarGraphView;
@@ -22,21 +27,28 @@ import com.jjoe64.graphview.LineGraphView;
 
 import content.Message;
 
-public class Statistics extends Activity{
+public class Statistics extends Activity implements OnItemSelectedListener{
 	SimpleDateFormat dateFormatter;
 	ArrayList<Message> messageList;
-	
-
+	private Spinner spinner1;
+	int iCurrentSelection;
 	
 	public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	//setContentView(R.layout.statistics);
 	setContentView(R.layout.graphs);
 	
+
+	spinner1 = (Spinner) findViewById(R.id.spinner1);
+	spinner1.setOnItemSelectedListener(this);
+	iCurrentSelection = spinner1.getSelectedItemPosition();
+	
 	List<String> days=new ArrayList<String>();
 	try {
 		//days = CalendarFunctions.getDaysFromBeginOfMonth("31.1.2013");
 		days = CalendarFunctions.getDaysFromBeginOfMonth(CalendarFunctions.now());
+		
+		  
 	} catch (ParseException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -64,17 +76,6 @@ public class Statistics extends Activity{
      	gvd[i]=new GraphViewData(i, databaseHandler.getCountMessagesOfDay(days.get(i)));		            	
      }
 	 GraphViewSeries exampleSeries = new GraphViewSeries(gvd);
-	/* 
-	 GraphViewSeries exampleSeries = new GraphViewSeries(new GraphViewData[] {
-			 			 	            
-				  new GraphViewData(1, 2.0d)
-				, new GraphViewData(2, 1.5d)
-				, new GraphViewData(2.5, 3.0d) // another frequency
-				, new GraphViewData(3, 2.5d)
-				, new GraphViewData(4, 1.0d)
-				, new GraphViewData(5, 3.0d)
-		});
-	 */
 
 		// graph with dynamically genereated horizontal and vertical labels
 		GraphView graphView;
@@ -102,7 +103,31 @@ public class Statistics extends Activity{
 		graphView.setHorizontalLabels(arrayDays);
 		layout.addView(graphView);
 	   }
+	
+	  /*public void addListenerOnSpinnerItemSelection() {
+			spinner1 = (Spinner) findViewById(R.id.spinner1);
+			spinner1.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+		  }*/
+	   
+	
+	@Override
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+			long arg3) {
+		
 
-	   	   
+	      if (iCurrentSelection != (int)arg3){
+	    	  //Toto se provede, pokud nastane zmìna ve výbìru položky
+	    	  Toast.makeText(Statistics.this, "Zmìna: arg2:" + arg2 +" arg3: "+arg3+" selection: " + iCurrentSelection , Toast.LENGTH_LONG).show();
+	      }
+	      iCurrentSelection = (int)arg3;
+	      
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	}
 
