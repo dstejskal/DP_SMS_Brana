@@ -37,8 +37,7 @@ public class CalendarFunctions {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 		Date lastDate=sdf.parse(end);
-		
-		
+					
 		calendar.setTime(lastDate);
 		calendar.set(Calendar.DAY_OF_MONTH, 1); //získání prvního dne v mìsíci
 
@@ -51,6 +50,55 @@ public class CalendarFunctions {
 		Date result=calendar.getTime(); //pøidání posledního dne
 		dates.add(sdf.format(result));
 		
+		return dates;
+		
+	}
+	
+	public static List<String> getDaysFromToday(int countOfDays) throws ParseException{
+		
+		List<String> dates=new ArrayList<String>();
+		Calendar calendar= new GregorianCalendar();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+		Date lastDate=sdf.parse(CalendarFunctions.now()); //dnešní datum
+        calendar.setTime(lastDate);	
+        
+		calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH)-countOfDays); //získání dne pøed týdnem
+
+		while(calendar.getTime().before(lastDate)){
+		Date result=calendar.getTime();
+		dates.add(sdf.format(result));
+		calendar.add(Calendar.DATE, 1);			
+		}
+		
+		Date result=calendar.getTime(); //pøidání posledního dne
+		dates.add(sdf.format(result));
+		 
+		return dates;
+		
+	}
+	//dodìlat - vypsání všech dnù od urèitého dne - pro výpis všech SMS
+	public static List<String> getDaysFromDate(String day) throws ParseException{
+		
+		List<String> dates=new ArrayList<String>();
+		Calendar calendar= new GregorianCalendar();
+		
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+		Date lastDate=sdf.parse(day);
+		Date now=sdf.parse(CalendarFunctions.now());
+        calendar.setTime(lastDate);	//nastavím datum na nejstarší dostupné
+        
+
+		while(calendar.getTime().before(now)){
+		Date result=calendar.getTime();
+		dates.add(sdf.format(result));
+		calendar.add(Calendar.DATE, 1);			
+		}
+		
+		Date result=calendar.getTime(); //pøidání posledního dne
+		dates.add(sdf.format(result));
+		 
 		return dates;
 		
 	}

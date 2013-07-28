@@ -51,6 +51,19 @@ public class DBArchiveAdapter extends DBAdapter{
 		return db.query(TABLE_ARCHIVE, null, COLUMN_DATE + "='" + date+"'", null, null, null, null);
 	}
 	
+	//metoda pro získání nejstarší SMS - využito ve statistikách pro zobrazení všech záznamù
+	public Cursor oldestMessage(){
+//		Cursor c= db.query(TABLE_ARCHIVE, new String[] { COLUMN_ID, "min("+ COLUMN_MID +")", COLUMN_SENDER, COLUMN_RECIPIENT,
+//				COLUMN_DATE}, null, null, null, null, null);
+		
+//		Cursor c= db.rawQuery("SELECT MIN(_id) FROM archive", null);
+//		c.moveToFirst();
+//		c.close();
+//		return c;
+//return db.rawQuery("SELECT MIN(_id) FROM archive", null);		
+return db.query(TABLE_ARCHIVE, null, COLUMN_ID + "=" + 1, null, null, null, null);
+	}
+	
 	public void updateMessage(long id, int mid , String sender,String recipient, String date)
 	{
 		ContentValues values = buildValues(mid, sender, recipient, date);

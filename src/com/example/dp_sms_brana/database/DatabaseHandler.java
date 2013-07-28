@@ -131,6 +131,18 @@ public ArrayList<Message> getMessagesOfDay(String date){
 	
 }
 
+public Message oldestMessage(){
+	Message message=null;
+	dBArchiveAdapter.open();	
+	Cursor cursor=dBArchiveAdapter.oldestMessage();
+	
+	if (cursor != null && cursor.getCount() != 0)
+	{	
+    message = createMessageFromCursor(cursor);	
+	}
+	return message;	
+}
+
 public int getCountMessagesOfDay(String date){
 	int count=0;
 	dBArchiveAdapter.open();	
