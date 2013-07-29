@@ -21,6 +21,7 @@ public class CalendarFunctions {
 	    return result;
 	}
 	
+	
 	public static String now() {
 		String date;
 		//Calendar cal = Calendar.getInstance();
@@ -28,6 +29,18 @@ public class CalendarFunctions {
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
 		date=sdf.format(d);
 		return date;
+	}
+	
+	public static boolean readyToSend(String sendTime){
+		if (sendTime==""||sendTime==null) return false;
+		String now;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date d= new Date();
+		now=sdf.format(d);
+		//pokud nastal èas odeslání, vrátím pravdivou odpovìï
+		if (sendTime.compareTo(now)<=0)
+		return true;
+		return false;
 	}
 	
 	public static List<String> getDaysFromBeginOfMonth(String end) throws ParseException{

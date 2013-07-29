@@ -58,6 +58,7 @@ public class DataJSONParser {
         int id=-1;
         String text = "";
         String phone="";
+        String send_date="";
         short sent=0;
 
         try {
@@ -65,14 +66,15 @@ public class DataJSONParser {
             id=jMessage.getInt("id");
             
             text = jMessage.getString("text");
-            phone = jMessage.getString("phone");
-            
+            phone = jMessage.getString("phone");            
             sent =(short)jMessage.getInt("sent"); 
+            send_date = jMessage.getString("send_date");  
             
             message.put("id", id);
             message.put("text", text);
             message.put("phone", phone);
             message.put("sent", sent);
+            message.put("send_date", send_date);
             
  
         } catch (JSONException e) {

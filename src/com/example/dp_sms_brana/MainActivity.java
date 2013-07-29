@@ -47,6 +47,7 @@ public class MainActivity extends Activity implements Observer {
 	       //Toast.makeText(MainActivity.this, "Poèet odeslaných SMS: "+ Integer.toString(databaseHandler.getMessagesCount()), Toast.LENGTH_SHORT).show();
 	       Toast.makeText(MainActivity.this, "Pro další nabídku stisknìte menu ", Toast.LENGTH_LONG).show(); 
 	    }
+	 
 	    public void connectDatabase (View toogleDatabase){
 	    	
 	    	sender=new SmsSender(getApplicationContext()); //AsynncTask lze spustit pouze jednou, musím vytvoøit nové instance
@@ -57,7 +58,7 @@ public class MainActivity extends Activity implements Observer {
 	    	 running=true;
 	    	 }else{
 	    		 sender.cancel(true); 
-	
+	             sender.stopTask();
 	    		 Toast.makeText(MainActivity.this, "Odpojuji databázi", Toast.LENGTH_SHORT).show();
 	    		 running=false;
 
@@ -113,6 +114,7 @@ public class MainActivity extends Activity implements Observer {
 		    	 startActivity(settingsActivity);
 		       return true;
 		     case R.id.info:
+
 		    	    AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 		    	    TextView myMsg = new TextView(this);	    	  
 		    	    myMsg.setText("Autor: Bc. Drahoslav Stejskal,\n diplomová práce\n Univerzita Pardubice\n 2013\n\n" +

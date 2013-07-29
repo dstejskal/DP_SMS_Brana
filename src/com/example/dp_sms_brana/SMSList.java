@@ -7,7 +7,6 @@ import java.util.List;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,7 +16,6 @@ import android.util.Log;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
-import android.app.AlertDialog;
 //import android.widget.TextView;
 //import android.view.Menu;
 
@@ -72,6 +70,7 @@ public class SMSList extends Activity {
             try{
                 //jObject = JSONfunctions.getJSONfromURL("http://dsweb.g6.cz/diplomka/api/data.php");      
             	//adresu naèteme pomocí sdílených hodnot nastaveení aplikace
+            	String adresa=SettingsActivity.getApiData(getApplicationContext());
             	jObject = JSONfunctions.getJSONfromURL(SettingsActivity.getApiData(getApplicationContext()));    
                 DataJSONParser messagesJsonParser = new DataJSONParser();
                 if (jObject==null){       	
@@ -88,12 +87,10 @@ public class SMSList extends Activity {
  
             try{
                 /** Getting the parsed data as a List construct */
-                message = dataJsonParser.parse(jObject);
-                
+                message = dataJsonParser.parse(jObject);                
                 /** Keys used in Hashmap */
-
                 String[] from = {"text","phone"};
-                //metoda automaticky pøepošle SMS, které naète z DB
+
                 int[] to = { R.id.sms_text,R.id.sms_phone};
                 /** Instantiating an adapter to store each items
                 *  R.layout.listview_layout defines the layout of each item
@@ -113,8 +110,7 @@ public class SMSList extends Activity {
         /** This will be executed in ui thread */
         @Override
         protected void onPostExecute(SimpleAdapter adapter) {
-        	
-             
+        	          
             /** Getting a reference to listview of main.xml layout file */
             ListView listView = ( ListView ) findViewById(R.id.lv_countries);
  
@@ -122,8 +118,12 @@ public class SMSList extends Activity {
             	Toast.makeText(SMSList.this, "Adresa pro stažení dat je nedostupná!.", Toast.LENGTH_SHORT).show(); 
             }else
             /** Setting the adapter containing the country list to listview */
-            listView.setAdapter(adapter);
+                listView.removeAllViewsInLayout();
+            	listView.setAdapter(adapter);
         }
+        
+ 
+
         
        /* @Override
         protected void onPreExecute() {
