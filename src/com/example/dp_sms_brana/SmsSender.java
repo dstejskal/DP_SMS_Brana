@@ -56,20 +56,15 @@ public class SmsSender extends AsyncTask<String, Void, String> {
 		running = true;
 		while (true) {
 			try {
-
-				if (sending == false) // pokud již neodesílám zprávy,
-										// zkontroluji, zda nejsou ve frontì
-										// nové
+				// pokud již neodesílám zprávy, zkontroluji, zda nejsou ve frontì nové
+				if (sending == false) 
 				{
-					sendNewSms(); // odeslání nových sms stažených pøes JSON,
-									// kontrola nových sms každých x vteøin dle
-									// nastavení uživatele.
+					// odeslání nových sms stažených pøes JSON, kontrola nových sms každých x vteøin dle nastavení uživatele .
+					sendNewSms(); 
 				}
-
-				// int timeSinceLastUpdate = 1000*30; //uspání vlákna na 30
-				// vteøin
+				// uspání vlákna na x vteøin
 				int timeSinceLastUpdate = 1000 * SettingsActivity
-						.getInterval(this.context); // uspání vlákna na x vteøin
+						.getInterval(this.context); 
 				Thread.sleep(timeSinceLastUpdate);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -108,19 +103,15 @@ public class SmsSender extends AsyncTask<String, Void, String> {
 
 		DatabaseHandler databaseHandler = new DatabaseHandler(this.context);
 
-		if (ConnectionInfo.isConnected(context)) { // pokud je dostupné
-													// pøipojení k internetu,
-													// stáhnu nová data
+		// pokud je dostupné pøipojení k internetu, stáhnu nová data
+		if (ConnectionInfo.isConnected(context)) { 
 
 			ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();
-
-			// JSONObject json =
-			// JSONfunctions.getJSONfromURL("http://dsweb.g6.cz/diplomka/api/data.php");
 			JSONObject json = JSONfunctions.getJSONfromURL(SettingsActivity
 					.getApiData(this.context));
 
 			if (json == null) {
-				// špatný formát dat! dodìlat chybovou hlášku
+				// špatný formát dat!
 				return;
 			}
 			try {
@@ -139,36 +130,39 @@ public class SmsSender extends AsyncTask<String, Void, String> {
 					map.put("phone", "phone: " + e.getString("phone"));
 
 					// odstranìní diakritiky, problém s èeštinou na emulátorech,
-					// nevím jak v reálné aplikaci
-					// funkce normalize az od API 9!
+					// nevím jak v reálné aplikaci funkce normalize az od API 9!
 					String normalizedText = removeDiacritics(e
 							.getString("text"));
-					// String normalized =
-					// Normalizer.normalize(e.getString("text"),
-					// Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+",
-					// "");
 
 					// odeslání zprávy
 					String sendDate = e.getString("send_date");
-					if (sendDate != "") {
+					
+					if (sendDate != "null" && sendDate != null && sendDate!="") {
 						// SMS s naplánovaným èasem odesláním
+						boolean send=CalendarFunctions.readyToSend(sendDate);
 						if (CalendarFunctions.readyToSend(sendDate)) {
 							sendSms(e.getString("phone"), normalizedText);
 							updateSmsStatus(e.getInt("id"));
+							
+							message = new content.Message((long) e.getInt("id"),
+									(long) e.getInt("id"), "sender",
+									e.getString("phone"), CalendarFunctions.now(),
+									e.getString("text"), this.context);
+							databaseHandler.saveMessage(message); // vložení do SQLite
+							mylist.add(map);
 						}
 					} else{
 						sendSms(e.getString("phone"), normalizedText);
-						updateSmsStatus(e.getInt("id"));							
+						updateSmsStatus(e.getInt("id"));	
+						
+						message = new content.Message((long) e.getInt("id"),
+								(long) e.getInt("id"), "sender",
+								e.getString("phone"), CalendarFunctions.now(),
+								e.getString("text"), this.context);
+						databaseHandler.saveMessage(message); // vložení do SQLite
+						mylist.add(map);
 					}
 						
-
-
-					message = new content.Message((long) e.getInt("id"),
-							(long) e.getInt("id"), "sender",
-							e.getString("phone"), CalendarFunctions.now(),
-							e.getString("text"), this.context);
-					databaseHandler.saveMessage(message); // vložení do SQLite
-					mylist.add(map);
 				}
 
 				sending = false;
@@ -179,10 +173,8 @@ public class SmsSender extends AsyncTask<String, Void, String> {
 		}
 
 	}
-
-	public void updateSmsStatus(int id) { // nastaví SMS status na odesláno v
-											// MySql DB
-
+	// nastaví SMS status na odesláno v databázi
+	public void updateSmsStatus(int id) { 		
 		// http://www.helloandroid.com/tutorials/connecting-mysql-database
 		InputStream is = null;
 		String result = "";
@@ -190,16 +182,10 @@ public class SmsSender extends AsyncTask<String, Void, String> {
 		String ids = Integer.toString(id);
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		nameValuePairs.add(new BasicNameValuePair("id", ids));
-		nameValuePairs.add(new BasicNameValuePair("password", "secured")); // heslo
-																			// pro
-																			// zmìnu
-																			// obsahu
-
+		nameValuePairs.add(new BasicNameValuePair("password", "secured")); 
 		// http post
 		try {
 			HttpClient httpclient = new DefaultHttpClient();
-			// HttpPost httppost = new
-			// HttpPost("http://dsweb.g6.cz/diplomka/api/update-sms-status.php");
 			HttpPost httppost = new HttpPost(
 					SettingsActivity.getApiStatus(this.context));
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -225,9 +211,6 @@ public class SmsSender extends AsyncTask<String, Void, String> {
 			Log.e("log_tag", "Error converting result " + e.toString());
 		}
 
-	}
-
-	public void onPostExecute() {
 	}
 
 	public static String removeDiacritics(String s) {

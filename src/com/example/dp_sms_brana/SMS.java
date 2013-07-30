@@ -40,10 +40,8 @@ public class SMS extends Activity
                 SmsManager sms = SmsManager.getDefault();
                 
                 if (phoneNo.length()>0 && message.length()>0)                
-                    //sendSMS(phoneNo, message);
                     sms.sendTextMessage(phoneNo, "android", message, null, null);
-                //sendTextMessage(String destinationAddress, String scAddress, String text, PendingIntent sentIntent, PendingIntent deliveryIntent)
-                //Send a text based SMS.
+
                 else
                     Toast.makeText(getBaseContext(), 
                         "Zadejte prosím èíslo pøíjemce a text zprávy.", 
@@ -52,28 +50,22 @@ public class SMS extends Activity
         });        
     }
     
-    //metoda slouží pro automatické odesílání smsek
+    //Metoda pro odeslání SMS pøes GSM sí
     int MAX_SMS_MESSAGE_LENGTH=160;
     public void sendSms(String phone,String message)
     {
-        SmsManager manager = SmsManager.getDefault();
-
-        //PendingIntent piSend = PendingIntent.getBroadcast(this, 0, new Intent(SMS_SENT), 0);
-        //PendingIntent piDelivered = PendingIntent.getBroadcast(this, 0, new Intent(SMS_DELIVERED), 0);
-    
+        SmsManager manager = SmsManager.getDefault();    
                 int length = message.length();
 
                 if(length > MAX_SMS_MESSAGE_LENGTH)
                 {
                         ArrayList<String> messagelist = manager.divideMessage(message);
-
                         manager.sendMultipartTextMessage(phone, null, messagelist, null, null);
                 }
                 else
                 	
                 {
                 	if (phone.length()>0 && message.length()>0){
-                        //manager.sendTextMessage(phone, null, message, piSend, piDelivered);
                 		manager.sendTextMessage(phone, null, message, null, null);
                 	}
                 }

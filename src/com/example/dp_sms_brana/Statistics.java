@@ -37,7 +37,6 @@ public class Statistics extends Activity implements OnItemSelectedListener{
 
 	public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	//setContentView(R.layout.statistics);
 	setContentView(R.layout.graphs);
 
 	spinner1 = (Spinner) findViewById(R.id.spinner1);
@@ -53,46 +52,39 @@ public class Statistics extends Activity implements OnItemSelectedListener{
     	
     	List<String> days=new ArrayList<String>();
     	try {
-    		//days = CalendarFunctions.getDaysFromBeginOfMonth("31.1.2013");
-    		if (interval==0){ //defaultní nastavení
+    		if (interval==0){ 
     			//všechny dny z uplynulého měsíce
     		days = CalendarFunctions.getDaysFromBeginOfMonth(CalendarFunctions.now());
     		}
     		else if (interval==-1){//vypsání všech SMS
-    	    //Date firstDate=new Date(databaseHandler.oldestMessage().getDate());
-    		//String den=	databaseHandler.oldestMessage().getDate();
-    		String den=	databaseHandler.getMessage(1).getDate(); //získání první SMS
-    	    //days=CalendarFunctions.getDaysFromDate(databaseHandler.oldestMessage().getDate());
-    		days=CalendarFunctions.getDaysFromDate(den);
+    		//získání první SMS
+    		String first=	databaseHandler.getMessage(1).getDate(); 
+    		days=CalendarFunctions.getDaysFromDate(first);
     			
     		}else {
     			//počet dnů od dnešního dne do minulosti
     		days = CalendarFunctions.getDaysFromToday(interval);	   			
     		}
     		if (days==null){
-    			Toast.makeText(Statistics.this,"Nebyly odeslány žádné zprávy.", Toast.LENGTH_LONG).show();  			
-    			return; //pokud nejsou žádné sms, nevykreslím graf	
+    			Toast.makeText(Statistics.this,"Nebyly odeslány žádné zprávy.", Toast.LENGTH_LONG).show();  	
+    			//pokud nejsou žádné sms, nevykreslím graf	
+    			return; 
     		} 
 
     	} catch (ParseException e) {
-    		// TODO Auto-generated catch block
     		e.printStackTrace();
     	}
 
     	
     	TextView countSms = (TextView) findViewById(R.id.countSms);
-    	//countSms.setText("Počet odeslaných SMS:  " + Integer.toString(databaseHandler.getMessagesCount()));
    
     	dateFormatter=new SimpleDateFormat("dd.MM.yyyy");
     	Date date=new Date();
     	try {
     		date=(Date)dateFormatter.parse("1.01.2013");
     	} catch (ParseException e) {
-    		// TODO Auto-generated catch block
     		e.printStackTrace();
     	}
-
-    	 //messageList=databaseHandler.getAllMessages();
 
     	 int countOfDays=days.size();
     	 GraphViewData[] gvd=new GraphViewData[countOfDays];	 
@@ -104,17 +96,17 @@ public class Statistics extends Activity implements OnItemSelectedListener{
     	 countSms.setText("Počet odeslaných SMS:  " + countOfSMS);
     	 GraphViewSeries exampleSeries = new GraphViewSeries(gvd);
 
-    		// graph with dynamically genereated horizontal and vertical labels
+    		// graf s dynamicky generovanými popisky - vertikální, horizontální
     		GraphView graphView;
     		if (getIntent().getStringExtra("type").equals("bar")) {
     			graphView = new BarGraphView(
-    					this // context
-    					, "Vytížení SMS brány" // heading
+    					this 
+    					, "Vytížení SMS brány" 
     			);
     		} else {
     			graphView = new LineGraphView(
-    					this // context
-    					, "Vytížení SMS brány"// heading
+    					this 
+    					, "Vytížení SMS brány"
     			);
     		}
     		((LineGraphView) graphView).setDrawBackground(true);
@@ -128,27 +120,21 @@ public class Statistics extends Activity implements OnItemSelectedListener{
 
     		//popisky osy x - datumy nevykresluj u intrevalu vše
     		if (interval!=-1) graphView.setHorizontalLabels(arrayDays);
-    		//přidáno kvůli obnově grafů
-    		layout.removeAllViewsInLayout();
     		
+    		//přidáno kvůli obnově grafů - odstranění layoutu
+    		layout.removeAllViewsInLayout();	
+    		//přidání grafu do layoutu
     		layout.addView(graphView);		
     }
-    
-    
+       
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
 			long arg3) {
 
 
 	      if (iCurrentSelection != (int)arg3){
-	    	  //Toto se provede, pokud nastane zmìna ve výběru položky
-	    	  
-	    	   //znovu načtení aktivity
-	           interval=10;
-	    	   //finish();
-	    	   //startActivity(getIntent());	
-	           
-	    	   //Toast.makeText(Statistics.this, "Změna: arg2:" + arg2 +" arg3: "+arg3+" selection: " + iCurrentSelection , Toast.LENGTH_LONG).show();
+	    	  //Toto se provede, pokud nastane změna ve výběru položky
+	    	   
 	    	   switch (arg2){
 	    	   case 0: paintGraph(1);
 	    	   break;
@@ -163,7 +149,6 @@ public class Statistics extends Activity implements OnItemSelectedListener{
 	    	   default: paintGraph(0);
 	    	   break;
 	    	   }
-	           //paintGraph(6);
 	      }
 	      iCurrentSelection = (int)arg3;
 
@@ -191,5 +176,4 @@ public class Statistics extends Activity implements OnItemSelectedListener{
 
 	}
 	
-
 	}
