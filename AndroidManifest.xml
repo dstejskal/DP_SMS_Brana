@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.example.dp_sms_brana.SMSList" />
-        <activity android:name="com.example.dp_sms_brana.SMSList2" />
+        <activity android:name="com.example.dp_sms_brana.SMSList" />
         <activity android:name="com.example.dp_sms_brana.SMS" />
         <activity android:name="com.example.dp_sms_brana.SendSmsToDatabase" />
         <activity android:name="com.example.dp_sms_brana.Statistics" />

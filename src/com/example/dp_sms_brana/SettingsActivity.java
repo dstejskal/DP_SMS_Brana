@@ -26,17 +26,17 @@ implements OnSharedPreferenceChangeListener{
 
 
 	public static String getApiData(Context ctx) {
-		return PreferenceManager.getDefaultSharedPreferences(ctx).getString(apiData,"");
+		return PreferenceManager.getDefaultSharedPreferences(ctx).getString(apiData,"http://dsweb.g6.cz/diplomka/api/user-data.php");
 	}
 
 
 	public static String getApiSend(Context ctx) {
-		return PreferenceManager.getDefaultSharedPreferences(ctx).getString(apiSend,"");
+		return PreferenceManager.getDefaultSharedPreferences(ctx).getString(apiSend,"http://dsweb.g6.cz/diplomka/api/send-sms.php");
 	}
 
 
 	public static String getApiStatus(Context ctx) {
-		return PreferenceManager.getDefaultSharedPreferences(ctx).getString(apiStatus,"");
+		return PreferenceManager.getDefaultSharedPreferences(ctx).getString(apiStatus,"http://dsweb.g6.cz/diplomka/api/update-sms-status.php");
 	}
 
 

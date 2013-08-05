@@ -12,7 +12,7 @@
         android:key="apiData"
         android:summary="@string/urlDesc"
         android:title="@string/apiData" 
-        android:defaultValue="http://dsweb.g6.cz/diplomka/api/data.php"/>
+        android:defaultValue="http://dsweb.g6.cz/diplomka/api/user-data.php"/>
    
     <EditTextPreference
         android:key="apiSend"

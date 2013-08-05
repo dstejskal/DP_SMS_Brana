@@ -107,9 +107,9 @@ public class SmsSender extends AsyncTask<String, Void, String> {
 		if (ConnectionInfo.isConnected(context)) { 
 
 			ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();
-			JSONObject json = JSONfunctions.getJSONfromURL(SettingsActivity
-					.getApiData(this.context));
-
+			
+			JSONObject json = JSONfunctions.getJSONfromURL(SettingsActivity.getApiData(this.context));
+			//JSONObject json = JSONfunctions.getJSONfromURL2("http://dsweb.g6.cz/diplomka/api/user-data.php");
 			if (json == null) {
 				// špatný formát dat!
 				return;
@@ -181,15 +181,27 @@ public class SmsSender extends AsyncTask<String, Void, String> {
 		// the year data to send
 		String ids = Integer.toString(id);
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		if(Token.getToken()==null){
+			Token.setToken(JSONfunctions.getTokenFromJSON(SettingsActivity.getApiStatus(this.context)));
+		}
 		nameValuePairs.add(new BasicNameValuePair("id", ids));
-		nameValuePairs.add(new BasicNameValuePair("password", "secured")); 
+		nameValuePairs.add(new BasicNameValuePair("token", Token.getToken())); 
+		nameValuePairs.add(new BasicNameValuePair("nick", "admin")); 
 		// http post
 		try {
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httppost = new HttpPost(
-					SettingsActivity.getApiStatus(this.context));
+			HttpPost httppost = new HttpPost(SettingsActivity.getApiStatus(this.context));
+			//HttpPost httppost = new HttpPost("http://dsweb.g6.cz/diplomka/api/update-sms-status.php");
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			HttpResponse response = httpclient.execute(httppost);
+			
+			int responseCode=response.getStatusLine().getStatusCode();
+			if (responseCode==449){
+			Token.setToken(null);	
+			//spustíme metodu znova, naèteme pøi tom nový token
+			updateSmsStatus(id);
+			}
+			
 			HttpEntity entity = response.getEntity();
 			is = entity.getContent();
 		} catch (Exception e) {

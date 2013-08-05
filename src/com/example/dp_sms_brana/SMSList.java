@@ -28,10 +28,9 @@ public class SMSList extends Activity {
 			try {
 				try {
 					// adresu naèteme pomocí sdílených hodnot nastaveeníaplikace
-					String adresa = SettingsActivity
-							.getApiData(getApplicationContext());
-					jObject = JSONfunctions.getJSONfromURL(SettingsActivity
-							.getApiData(getApplicationContext()));
+					String adress = SettingsActivity.getApiData(getApplicationContext());
+					jObject = JSONfunctions.getJSONfromURL(adress);
+					
 					DataJSONParser messagesJsonParser = new DataJSONParser();
 					if (jObject == null) {
 						// return adapter;

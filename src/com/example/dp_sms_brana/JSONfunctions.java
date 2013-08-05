@@ -25,55 +25,7 @@ import android.util.Log;
 //import android.net.NetworkInfo;
 
 public class JSONfunctions {
-    static String token=null;
-	public static JSONObject getJSONfromURL(String url) {
-		InputStream is = null;
-		String result = "";
-		JSONObject jArray = null;
 
-		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-		// pøidání hesla pro pøístup k API
-		nameValuePairs.add(new BasicNameValuePair("password", "secured"));
-
-		// http post
-		try {
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httppost = new HttpPost(url);
-			// heslo pro ovìøení identity
-			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-			HttpResponse response = httpclient.execute(httppost);
-			HttpEntity entity = response.getEntity();
-			is = entity.getContent();
-
-		} catch (Exception e) {
-			Log.e("log_tag", "Error in http connection " + e.toString());
-		}
-
-		// convert response to string
-		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					is, "iso-8859-1"), 8);
-			StringBuilder sb = new StringBuilder();
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				sb.append(line + "\n");
-			}
-			is.close();
-			result = sb.toString();
-		} catch (Exception e) {
-			Log.e("log_tag", "Error converting result " + e.toString());
-		}
-
-		try {
-
-			jArray = new JSONObject(result);
-		} catch (JSONException e) {
-			Log.e("log_tag", "Error parsing data " + e.toString());
-		}
-
-		return jArray;
-	}
-	
 	private static HttpResponse getResponse(String url, ArrayList<NameValuePair> nvp){
 			
 		HttpClient httpclient = new DefaultHttpClient();
@@ -103,7 +55,7 @@ public class JSONfunctions {
 		return null;
 	}
 
-	public static JSONObject getJSONfromURL2(String url) {
+	public static JSONObject getJSONfromURL(String url) {
 		InputStream is = null;
 		String result = "";
 		JSONObject jArray = null;
@@ -111,9 +63,11 @@ public class JSONfunctions {
 		// pøidání hesla pro pøístup k API
 		
 		//pøi prvním spuštìní zažádám o token
-		if (token==null) token=getTokenFromJSON(url);
+		if (Token.getToken()==null) {
+			Token.setToken(getTokenFromJSON(url));
+		}
 		nameValuePairs.add(new BasicNameValuePair("nick", "admin"));
-		nameValuePairs.add(new BasicNameValuePair("token", token));
+		nameValuePairs.add(new BasicNameValuePair("token", Token.getToken()));
 
 		// http post
 		try {
@@ -122,12 +76,12 @@ public class JSONfunctions {
 			// heslo pro ovìøení identity
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			HttpResponse response = httpclient.execute(httppost);
-			//získání návratového kódu - 211 = nutná reautorizace
+			//získání návratového kódu - 449 = nutná reautorizace (døíve 221)
 			int responseCode=response.getStatusLine().getStatusCode();
-			if (responseCode==211){
-			token=null;	
+			if (responseCode==449){
+			Token.setToken(null);	
 			//spustíme metodu znova, naèteme pøi tom token
-			getJSONfromURL2(url);
+			getJSONfromURL(url);
 			}
 			HttpEntity entity = response.getEntity();
 			is = entity.getContent();
@@ -192,7 +146,8 @@ public class JSONfunctions {
 		    try {
 		    	JSONObject jObject = new JSONObject(result);
 			    //získání tokenu
-				token = jObject.getString("token");
+		        Token.setToken(jObject.getString("token"));
+				//token = jObject.getString("token");
 			    
 			}catch(Exception e){}
 
@@ -201,8 +156,8 @@ public class JSONfunctions {
 				e.printStackTrace();
 			}
 		}catch(Exception e){}	
-		
-		return token;
+		return Token.getToken();
+		//return token;
 	}	
 
 }

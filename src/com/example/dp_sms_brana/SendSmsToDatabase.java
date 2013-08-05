@@ -18,6 +18,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,7 +35,7 @@ public class SendSmsToDatabase extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.sms_send);
-
+    
 		btnSendSMS = (Button) findViewById(R.id.btnSendSMS);
 		txtPhoneNo = (EditText) findViewById(R.id.txtPhoneNo);
 		txtMessage = (EditText) findViewById(R.id.txtMessage);
@@ -62,11 +63,14 @@ public class SendSmsToDatabase extends Activity {
 		final String tel = phone;
 		final String day = date;
 
+
 		new Thread(new Runnable() {
 			public void run() {
 				// http://www.helloandroid.com/tutorials/connecting-mysql-database
 				InputStream is = null;
 				String result = "";
+				boolean success=false;
+				HttpResponse response2=null;
 
 				// http post
 				try {
@@ -77,22 +81,40 @@ public class SendSmsToDatabase extends Activity {
 							.add(new BasicNameValuePair("sender", author));
 					nameValuePairs.add(new BasicNameValuePair("text", content));
 					nameValuePairs.add(new BasicNameValuePair("phone", tel));
-					// nameValuePairs.add(new BasicNameValuePair("date",date));
-					// heslo pro zmìnu obsahu
-					nameValuePairs.add(new BasicNameValuePair("password","secured")); 
-					//identifikátor mobilního telefonu - musí se shodovat s id v hlavní databázi
-					nameValuePairs.add(new BasicNameValuePair("userid", "1"));
 
-					HttpPost httppost = new HttpPost(SettingsActivity
-							.getApiSend(getApplicationContext()));
+					if(Token.getToken()==null){
+					//Token není platný, zadám heslo a zažádám o nový
+					Token.setToken(JSONfunctions.getTokenFromJSON(SettingsActivity.getApiSend(getApplicationContext())));			
+				    //Token.setToken(JSONfunctions.getTokenFromJSON("http://dsweb.g6.cz/diplomka/api/send-sms.php"));	
+					}
+				    nameValuePairs.add(new BasicNameValuePair("token",Token.getToken())); 						
+					nameValuePairs.add(new BasicNameValuePair("nick", "admin"));
+					//identifikátor uživatele mobilního telefonu - musí se shodovat s nickem v hlavní databázi
+
+					String adress=SettingsActivity.getApiSend(SendSmsToDatabase.this.getApplicationContext());
+					//String adress="http://dsweb.g6.cz/diplomka/api/send-sms.php";
+					HttpPost httppost = new HttpPost(adress);
 					httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 					HttpResponse response = httpclient.execute(httppost);
-					if (response != null) {
+					int responseCode=response.getStatusLine().getStatusCode();
+					//pokud vypršela platnost tokenu, je vrácen kód 449
+					
+					if(responseCode==449){
+				    //nastavím token a znova spustím metodu pro odeslání SMS
+						
+				    Token.setToken(JSONfunctions.getTokenFromJSON(SettingsActivity.getApiSend(getApplicationContext())));		
+					//Token.setToken(JSONfunctions.getTokenFromJSON("http://dsweb.g6.cz/diplomka/api/send-sms.php"));	
+				    //musím ukonèit vlákno
+
+					HttpPost httppost2 = new HttpPost(adress);
+					httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+					response2 = httpclient.execute(httppost);
+					}
+					if (response2 != null) {
 						HttpEntity entity = response.getEntity();
 						is = entity.getContent();
-					} else {
-
-					}
+						success=true;
+					} 
 
 				} catch (ClientProtocolException e) {
 					Log.e("log_tag", "Error in http connection " + e.toString());
@@ -121,10 +143,9 @@ public class SendSmsToDatabase extends Activity {
 
 			}
 		}).start();
-
-		Toast.makeText(SendSmsToDatabase.this,
-				"SMS byla odeslána do databáze ", Toast.LENGTH_LONG).show();
+		Toast.makeText(SendSmsToDatabase.this,"SMS byla odeslána do databáze ", Toast.LENGTH_LONG).show();
 		this.finish();
+	
 
 	}
 

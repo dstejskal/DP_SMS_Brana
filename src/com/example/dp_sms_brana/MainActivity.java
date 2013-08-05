@@ -66,7 +66,7 @@ public class MainActivity extends Activity implements Observer {
 			Toast.makeText(MainActivity.this, "Nahrávám data",
 					Toast.LENGTH_SHORT).show();
 			//Intent i = new Intent(this, SMSList.class);
-			Intent i = new Intent(this, SMSList2.class);
+			Intent i = new Intent(this, SMSList.class);
 			startActivity(i);
 			return true;
 		case R.id.send:
