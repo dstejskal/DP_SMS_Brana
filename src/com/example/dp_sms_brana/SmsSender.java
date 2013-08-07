@@ -142,7 +142,7 @@ public class SmsSender extends AsyncTask<String, Void, String> {
 						boolean send=CalendarFunctions.readyToSend(sendDate);
 						if (CalendarFunctions.readyToSend(sendDate)) {
 							sendSms(e.getString("phone"), normalizedText);
-							updateSmsStatus(e.getInt("id"));
+							updateSmsStatus(e.getInt("id"),e.getInt("id_user"));
 							
 							message = new content.Message((long) e.getInt("id"),
 									(long) e.getInt("id"), "sender",
@@ -153,7 +153,7 @@ public class SmsSender extends AsyncTask<String, Void, String> {
 						}
 					} else{
 						sendSms(e.getString("phone"), normalizedText);
-						updateSmsStatus(e.getInt("id"));	
+						updateSmsStatus(e.getInt("id"),e.getInt("id_user"));	
 						
 						message = new content.Message((long) e.getInt("id"),
 								(long) e.getInt("id"), "sender",
@@ -174,17 +174,19 @@ public class SmsSender extends AsyncTask<String, Void, String> {
 
 	}
 	// nastaví SMS status na odesláno v databázi
-	public void updateSmsStatus(int id) { 		
+	public void updateSmsStatus(int id, int idUser) { 		
 		// http://www.helloandroid.com/tutorials/connecting-mysql-database
 		InputStream is = null;
 		String result = "";
 		// the year data to send
 		String ids = Integer.toString(id);
+		String idUserString=Integer.toString(idUser);
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		if(Token.getToken()==null){
 			Token.setToken(JSONfunctions.getTokenFromJSON(SettingsActivity.getApiStatus(this.context)));
 		}
 		nameValuePairs.add(new BasicNameValuePair("id", ids));
+		nameValuePairs.add(new BasicNameValuePair("id_user", idUserString));
 		nameValuePairs.add(new BasicNameValuePair("token", Token.getToken())); 
 		nameValuePairs.add(new BasicNameValuePair("nick", "admin")); 
 		// http post
@@ -199,7 +201,7 @@ public class SmsSender extends AsyncTask<String, Void, String> {
 			if (responseCode==449){
 			Token.setToken(null);	
 			//spustíme metodu znova, naèteme pøi tom nový token
-			updateSmsStatus(id);
+			updateSmsStatus(id,idUser);
 			}
 			
 			HttpEntity entity = response.getEntity();

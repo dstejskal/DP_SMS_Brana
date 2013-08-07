@@ -31,15 +31,16 @@ public class CalendarFunctions {
 	}
 
 	public static boolean readyToSend(String sendTime) {
-		if (sendTime == "" || sendTime == null)
-			return false;
+		if (sendTime == "" || sendTime == null){
+			return false;}
 		String now;
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date d = new Date();
 		now = sdf.format(d);
 		// pokud nastal èas odeslání, vrátím pravdivou odpovìï
-		if (sendTime.compareTo(now) <= 0)
-			return true;
+		int vysledek=sendTime.compareTo(now);
+		if (sendTime.compareTo(now) <= 0){
+			return true;}
 		return false;
 	}
 
