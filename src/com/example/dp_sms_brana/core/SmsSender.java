@@ -1,4 +1,4 @@
-package com.example.dp_sms_brana;
+package com.example.dp_sms_brana.core;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -20,16 +20,25 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.telephony.SmsManager;
 import android.util.Log;
 
+import com.example.dp_sms_brana.activity.service.CalendarFunctions;
+import com.example.dp_sms_brana.activity.service.ConnectionInfoActivity;
+import com.example.dp_sms_brana.activity.ui.SettingsActivity;
 import com.example.dp_sms_brana.database.DatabaseHandler;
+import com.example.dp_sms_brana.database.IDatabaseHandler;
+import com.example.dp_sms_brana.entity.Message;
+import com.example.dp_sms_brana.json.JSONfunctions;
 
-import content.Message;
 
-public class SmsSender extends AsyncTask<String, Void, String> {
+public class SmsSender extends AsyncTask<String, Void, String> implements ISmsSender{
 	boolean sending = false;
 	boolean running = false;
 	Context context;
@@ -81,7 +90,8 @@ public class SmsSender extends AsyncTask<String, Void, String> {
 
 	public void sendSms(String phone, String message) {
 		SmsManager manager = SmsManager.getDefault();
-
+		
+		//http://stackoverflow.com/questions/5948961/how-to-know-whether-i-am-in-a-call-on-android/5949116#5949116
 		int length = message.length();
 
 		if (length > MAX_SMS_MESSAGE_LENGTH) {
@@ -101,10 +111,10 @@ public class SmsSender extends AsyncTask<String, Void, String> {
 
 	public void sendNewSms() throws ParseException {
 
-		DatabaseHandler databaseHandler = new DatabaseHandler(this.context);
+		IDatabaseHandler databaseHandler = new DatabaseHandler(this.context);
 
 		// pokud je dostupné pøipojení k internetu, stáhnu nová data
-		if (ConnectionInfo.isConnected(context)) { 
+		if (ConnectionInfoActivity.isConnected(context)) { 
 
 			ArrayList<HashMap<String, String>> mylist = new ArrayList<HashMap<String, String>>();
 			
@@ -144,7 +154,7 @@ public class SmsSender extends AsyncTask<String, Void, String> {
 							sendSms(e.getString("phone"), normalizedText);
 							updateSmsStatus(e.getInt("id"),e.getInt("id_user"));
 							
-							message = new content.Message((long) e.getInt("id"),
+							message = new com.example.dp_sms_brana.entity.Message((long) e.getInt("id"),
 									(long) e.getInt("id"), "sender",
 									e.getString("phone"), CalendarFunctions.now(),
 									e.getString("text"), this.context);
@@ -155,7 +165,7 @@ public class SmsSender extends AsyncTask<String, Void, String> {
 						sendSms(e.getString("phone"), normalizedText);
 						updateSmsStatus(e.getInt("id"),e.getInt("id_user"));	
 						
-						message = new content.Message((long) e.getInt("id"),
+						message = new com.example.dp_sms_brana.entity.Message((long) e.getInt("id"),
 								(long) e.getInt("id"), "sender",
 								e.getString("phone"), CalendarFunctions.now(),
 								e.getString("text"), this.context);
@@ -230,6 +240,18 @@ public class SmsSender extends AsyncTask<String, Void, String> {
 	public static String removeDiacritics(String s) {
 		return Normalizer.normalize(s, Normalizer.Form.NFD).replaceAll(
 				"\\p{InCombiningDiacriticalMarks}+", "");
+	}
+
+	@Override
+	public void start() {
+		// TODO Auto-generated method stub
+		execute("");
+	}
+
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+	cancel(true);	
 	}
 
 }

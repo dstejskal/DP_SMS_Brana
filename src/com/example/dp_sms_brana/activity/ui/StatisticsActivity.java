@@ -1,4 +1,4 @@
-package com.example.dp_sms_brana;
+package com.example.dp_sms_brana.activity.ui;
 
 
 
@@ -18,16 +18,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.dp_sms_brana.R;
+import com.example.dp_sms_brana.R.id;
+import com.example.dp_sms_brana.R.layout;
+import com.example.dp_sms_brana.activity.service.CalendarFunctions;
 import com.example.dp_sms_brana.database.DatabaseHandler;
+import com.example.dp_sms_brana.database.IDatabaseHandler;
+import com.example.dp_sms_brana.entity.Message;
 import com.jjoe64.graphview.BarGraphView;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GraphView.GraphViewData;
 import com.jjoe64.graphview.GraphViewSeries;
 import com.jjoe64.graphview.LineGraphView;
 
-import content.Message;
 
-public class Statistics extends Activity implements OnItemSelectedListener{
+public class StatisticsActivity extends Activity implements OnItemSelectedListener{
 	SimpleDateFormat dateFormatter;
 	ArrayList<Message> messageList;
 	private Spinner spinner1;
@@ -48,7 +53,7 @@ public class Statistics extends Activity implements OnItemSelectedListener{
 
     public void paintGraph (int interval){
     	int countOfSMS=0;
-    	DatabaseHandler databaseHandler =new DatabaseHandler(getApplicationContext());
+    	IDatabaseHandler databaseHandler =new DatabaseHandler(getApplicationContext());
     	
     	List<String> days=new ArrayList<String>();
     	try {
@@ -66,7 +71,7 @@ public class Statistics extends Activity implements OnItemSelectedListener{
     		days = CalendarFunctions.getDaysFromToday(interval);	   			
     		}
     		if (days==null){
-    			Toast.makeText(Statistics.this,"Nebyly odeslány žádné zprávy.", Toast.LENGTH_LONG).show();  	
+    			Toast.makeText(StatisticsActivity.this,"Nebyly odeslány žádné zprávy.", Toast.LENGTH_LONG).show();  	
     			//pokud nejsou žádné sms, nevykreslím graf	
     			return; 
     		} 

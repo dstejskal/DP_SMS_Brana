@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.database.Cursor;
-import content.Message;
-import content.UserSettings;
 
-public class DatabaseHandler {
+import com.example.dp_sms_brana.entity.Message;
+import com.example.dp_sms_brana.entity.UserSettings;
+
+
+public class DatabaseHandler implements IDatabaseHandler {
 
 private DBArchiveAdapter dBArchiveAdapter;
 private DBSettingsAdapter dBSettingsAdapter;
@@ -22,30 +24,45 @@ public DatabaseHandler(Context context)
 	dBSettingsAdapter = new DBSettingsAdapter(context);
 }
 
+/* (non-Javadoc)
+ * @see com.example.dp_sms_brana.database.IDatabaseHandler#deleteMessage(com.example.dp_sms_brana.entity.Message)
+ */
 public void deleteMessage(Message message){
 	dBArchiveAdapter.open();
 	dBArchiveAdapter.deleteMessage(message.get_id());
 	dBArchiveAdapter.close();
 }
 
+/* (non-Javadoc)
+ * @see com.example.dp_sms_brana.database.IDatabaseHandler#deleteSettings(com.example.dp_sms_brana.entity.UserSettings)
+ */
 public void deleteSettings(UserSettings settings){
 	dBSettingsAdapter.open();
 	dBSettingsAdapter.deleteSettings(settings.getId());
 	dBSettingsAdapter.close();
 }
 
+/* (non-Javadoc)
+ * @see com.example.dp_sms_brana.database.IDatabaseHandler#updateMessage(com.example.dp_sms_brana.entity.Message)
+ */
 public void updateMessage(Message message){
 	dBArchiveAdapter.open();
 	dBArchiveAdapter.insertMessage(message.get_id(), message.getSender(), message.getRecipient(), message.getDate());
 	dBArchiveAdapter.close();	
 }
 
+/* (non-Javadoc)
+ * @see com.example.dp_sms_brana.database.IDatabaseHandler#updateSettings(com.example.dp_sms_brana.entity.UserSettings)
+ */
 public void updateSettings(UserSettings  settings){
 	dBSettingsAdapter.open();
 	dBSettingsAdapter.insertSettings(settings.getInterval(), settings.getApiData(), settings.getApiSend(), settings.getApiStatus());
 	dBSettingsAdapter.close();	
 }
 
+/* (non-Javadoc)
+ * @see com.example.dp_sms_brana.database.IDatabaseHandler#saveMessage(com.example.dp_sms_brana.entity.Message)
+ */
 public long saveMessage(Message message){
 	dBArchiveAdapter.open();
 	long id=dBArchiveAdapter.insertMessage(message.getMid(), message.getSender(), message.getRecipient(), message.getDate());
@@ -53,6 +70,9 @@ public long saveMessage(Message message){
 	return id;
 }
 
+/* (non-Javadoc)
+ * @see com.example.dp_sms_brana.database.IDatabaseHandler#saveSettings(com.example.dp_sms_brana.entity.UserSettings)
+ */
 public long saveSettings(UserSettings settings){
 	dBSettingsAdapter.open();
 	long id=dBSettingsAdapter.insertSettings(settings.getInterval(), settings.getApiData(), settings.getApiSend(), settings.getApiStatus());
@@ -60,12 +80,15 @@ public long saveSettings(UserSettings settings){
 	return id;
 }
 
+/* (non-Javadoc)
+ * @see com.example.dp_sms_brana.database.IDatabaseHandler#getMessage(long)
+ */
 public Message getMessage(long id)
 {
 	dBArchiveAdapter.open();	
 	Cursor cursor=dBArchiveAdapter.fetchMessage(id);
 	Message message=null;
-	
+
 	if (cursor != null && cursor.getCount() != 0)
 	{
 		cursor.moveToFirst();
@@ -73,17 +96,20 @@ public Message getMessage(long id)
 
 		cursor.close();
 	}
-	
+
 	dBArchiveAdapter.close();
 	return message;
 }
 
+/* (non-Javadoc)
+ * @see com.example.dp_sms_brana.database.IDatabaseHandler#getSettings(long)
+ */
 public UserSettings getSettings(long id)
 {
 	dBSettingsAdapter.open();	
 	Cursor cursor=dBSettingsAdapter.fetchSettings(id);
 	UserSettings settings=null;
-	
+
 	if (cursor != null && cursor.getCount() != 0)
 	{
 		cursor.moveToFirst();
@@ -91,11 +117,14 @@ public UserSettings getSettings(long id)
 
 		cursor.close();
 	}
-	
+
 	dBArchiveAdapter.close();
 	return settings;	
 }
 
+/* (non-Javadoc)
+ * @see com.example.dp_sms_brana.database.IDatabaseHandler#getMessagesCount()
+ */
 public int getMessagesCount(){
 int count=-1;	
 dBArchiveAdapter.open();
@@ -105,8 +134,11 @@ dBArchiveAdapter.close();
 return count;
 }
 
+/* (non-Javadoc)
+ * @see com.example.dp_sms_brana.database.IDatabaseHandler#getMessagesOfDay(java.lang.String)
+ */
 public ArrayList<Message> getMessagesOfDay(String date){
-	
+
 	dBArchiveAdapter.open();	
 	Cursor cursor=dBArchiveAdapter.fetchMessageByDate(date);
 	Message message=null;
@@ -115,7 +147,7 @@ public ArrayList<Message> getMessagesOfDay(String date){
 	{		
 		cursor.moveToFirst();
 		messageList=new ArrayList<Message>();
-		
+
 		while(!cursor.isAfterLast()){
 			message = createMessageFromCursor(cursor);
 			messageList.add(message);
@@ -125,17 +157,20 @@ public ArrayList<Message> getMessagesOfDay(String date){
 
 		cursor.close();
 	}
-	
+
 	dBArchiveAdapter.close();
 	return messageList;	
-	
+
 }
 
+/* (non-Javadoc)
+ * @see com.example.dp_sms_brana.database.IDatabaseHandler#oldestMessage()
+ */
 public Message oldestMessage(){
 	Message message=null;
 	dBArchiveAdapter.open();	
 	Cursor cursor=dBArchiveAdapter.oldestMessage();
-	
+
 	if (cursor != null && cursor.getCount() != 0)
 	{	
     message = createMessageFromCursor(cursor);	
@@ -143,6 +178,9 @@ public Message oldestMessage(){
 	return message;	
 }
 
+/* (non-Javadoc)
+ * @see com.example.dp_sms_brana.database.IDatabaseHandler#getCountMessagesOfDay(java.lang.String)
+ */
 public int getCountMessagesOfDay(String date){
 	int count=0;
 	dBArchiveAdapter.open();	
@@ -153,8 +191,11 @@ public int getCountMessagesOfDay(String date){
 	return count;		
 }
 
+/* (non-Javadoc)
+ * @see com.example.dp_sms_brana.database.IDatabaseHandler#getAllMessages()
+ */
 public ArrayList<Message> getAllMessages(){
-	
+
 	dBArchiveAdapter.open();	
 	Cursor cursor=dBArchiveAdapter.getAllMessages();
 	Message message=null;
@@ -163,7 +204,7 @@ public ArrayList<Message> getAllMessages(){
 	{		
 		cursor.moveToFirst();
 		messageList=new ArrayList<Message>();
-		
+
 		while(!cursor.isAfterLast()){
 			message = createMessageFromCursor(cursor);
 			messageList.add(message);
@@ -173,10 +214,10 @@ public ArrayList<Message> getAllMessages(){
 
 		cursor.close();
 	}
-	
+
 	dBArchiveAdapter.close();
 	return messageList;	
-	
+
 }
 
 

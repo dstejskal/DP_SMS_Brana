@@ -1,4 +1,4 @@
-package com.example.dp_sms_brana;
+package com.example.dp_sms_brana.activity.service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +16,13 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+
+import com.example.dp_sms_brana.R;
+import com.example.dp_sms_brana.R.id;
+import com.example.dp_sms_brana.R.layout;
+import com.example.dp_sms_brana.activity.ui.SettingsActivity;
+import com.example.dp_sms_brana.core.Token;
+import com.example.dp_sms_brana.json.JSONfunctions;
 
 import android.app.Activity;
 import android.content.Context;

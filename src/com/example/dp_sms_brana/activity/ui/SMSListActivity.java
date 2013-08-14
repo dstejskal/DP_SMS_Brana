@@ -1,9 +1,17 @@
-package com.example.dp_sms_brana;
+package com.example.dp_sms_brana.activity.ui;
 
 import java.util.HashMap;
 import java.util.List;
 
 import org.json.JSONObject;
+
+import com.example.dp_sms_brana.R;
+import com.example.dp_sms_brana.R.id;
+import com.example.dp_sms_brana.R.layout;
+import com.example.dp_sms_brana.activity.service.ConnectionInfoActivity;
+import com.example.dp_sms_brana.json.DataJSONParser;
+import com.example.dp_sms_brana.json.JSONParser;
+import com.example.dp_sms_brana.json.JSONfunctions;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -18,7 +26,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class SMSList extends Activity {
+public class SMSListActivity extends Activity {
 	JSONObject jObject;
 	ListView listView = null;
 	SimpleAdapter adapter = null;
@@ -31,7 +39,7 @@ public class SMSList extends Activity {
 					String adress = SettingsActivity.getApiData(getApplicationContext());
 					jObject = JSONfunctions.getJSONfromURL(adress);
 					
-					DataJSONParser messagesJsonParser = new DataJSONParser();
+					JSONParser messagesJsonParser = new DataJSONParser();
 					if (jObject == null) {
 						// return adapter;
 					} else
@@ -40,7 +48,7 @@ public class SMSList extends Activity {
 					Log.d("JSON Exception1", e.toString());
 				}
 
-				DataJSONParser dataJsonParser = new DataJSONParser();
+				JSONParser dataJsonParser = new DataJSONParser();
 				List<HashMap<String, Object>> message = null;
 
 				try {
@@ -62,7 +70,7 @@ public class SMSList extends Activity {
 						public void run() {
 							if (listView == null) {
 								Toast.makeText(
-										SMSList.this,
+										SMSListActivity.this,
 										"Adresa pro stažení dat je nedostupná!.",
 										Toast.LENGTH_SHORT).show();
 							} else
@@ -72,7 +80,7 @@ public class SMSList extends Activity {
 							 */
 							{
 								if (adapter.isEmpty()) {
-									Toast.makeText(SMSList.this,
+									Toast.makeText(SMSListActivity.this,
 											"Žádné SMS k odeslání",
 											Toast.LENGTH_SHORT).show();
 								} else {
@@ -104,13 +112,13 @@ public class SMSList extends Activity {
 		setContentView(R.layout.sms_list);
 
 		// pokud je telefon pøipojen k internetu, stáhnu data
-		if (ConnectionInfo.isConnected(getApplicationContext())) { 
+		if (ConnectionInfoActivity.isConnected(getApplicationContext())) { 
 			try {
 				thread.start();
 			} catch (Exception e) {
 			}
 		} else {
-			Toast.makeText(SMSList.this,
+			Toast.makeText(SMSListActivity.this,
 					"Pro stažení dat je nutné pøipojení k INTERNETU.",
 					Toast.LENGTH_SHORT).show();
 		}

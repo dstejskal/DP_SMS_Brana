@@ -1,4 +1,4 @@
-package content;
+package com.example.dp_sms_brana.entity;
 
 public class Result {
 	private long _id;

@@ -1,8 +1,16 @@
-package com.example.dp_sms_brana;
+package com.example.dp_sms_brana.activity.ui;
 
 import java.text.ParseException;
 import java.util.Observable;
 import java.util.Observer;
+
+import com.example.dp_sms_brana.R;
+import com.example.dp_sms_brana.R.id;
+import com.example.dp_sms_brana.R.layout;
+import com.example.dp_sms_brana.R.menu;
+import com.example.dp_sms_brana.activity.service.SendSmsToDatabase;
+import com.example.dp_sms_brana.core.ISmsSender;
+import com.example.dp_sms_brana.core.SmsSender;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -18,7 +26,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity implements Observer {
 
-	SmsSender sender;
+	ISmsSender sender;
 	boolean running = false;
 
 	@Override
@@ -38,13 +46,15 @@ public class MainActivity extends Activity implements Observer {
 		sender = new SmsSender(getApplicationContext());
 
 		if (!running) {
-			sender.execute("");
+			//sender.execute("");
+			sender.start();
 			Toast.makeText(MainActivity.this, "Pøipojuji se k databázi",
 					Toast.LENGTH_SHORT).show();
 			running = true;
 		} else {
-			sender.cancel(true);
-			sender.stopTask();
+			//sender.cancel(true);
+			//sender.stopTask();
+			sender.stop();
 			Toast.makeText(MainActivity.this, "Odpojuji databázi",
 					Toast.LENGTH_SHORT).show();
 			running = false;
@@ -66,7 +76,7 @@ public class MainActivity extends Activity implements Observer {
 			Toast.makeText(MainActivity.this, "Nahrávám data",
 					Toast.LENGTH_SHORT).show();
 			//Intent i = new Intent(this, SMSList.class);
-			Intent i = new Intent(this, SMSList.class);
+			Intent i = new Intent(this, SMSListActivity.class);
 			startActivity(i);
 			return true;
 		case R.id.send:
@@ -97,7 +107,7 @@ public class MainActivity extends Activity implements Observer {
 			alertDialog.show();
 			return true;
 		case R.id.stats:
-			Intent graph = new Intent(this, Statistics.class);
+			Intent graph = new Intent(this, StatisticsActivity.class);
 			graph.putExtra("type", "line");
 			startActivity(graph);
 
@@ -111,7 +121,8 @@ public class MainActivity extends Activity implements Observer {
 	@Override
 	public void update(Observable observable, Object data) {
 
-		sender.execute("");
+		//sender.execute("");
+		sender.start();
 		Toast.makeText(MainActivity.this, "Pøeposílám nové SMS",
 				Toast.LENGTH_SHORT).show();
 		

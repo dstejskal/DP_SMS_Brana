@@ -1,11 +1,11 @@
-package com.example.dp_sms_brana;
+package com.example.dp_sms_brana.activity.service;
 
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-public class ConnectionInfo extends Activity {
+public class ConnectionInfoActivity extends Activity {
 
 	public static boolean isConnected(Context context) {
 

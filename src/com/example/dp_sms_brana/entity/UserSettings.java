@@ -1,4 +1,4 @@
-package content;
+package com.example.dp_sms_brana.entity;
 
 import android.content.Context;
 

@@ -1,4 +1,4 @@
-package com.example.dp_sms_brana;
+package com.example.dp_sms_brana.json;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,6 +18,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.example.dp_sms_brana.core.Token;
 
 import android.util.Log;
 //import android.content.Context;

@@ -1,4 +1,4 @@
-package com.example.dp_sms_brana;
+package com.example.dp_sms_brana.json;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,9 +8,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DataJSONParser {
+public class DataJSONParser implements JSONParser {
 
-	/** Pøijímá JSONObject a vrací list */
+	/* (non-Javadoc)
+	 * @see com.example.dp_sms_brana.json.JSONParser#parse(org.json.JSONObject)
+	 */
 	public List<HashMap<String, Object>> parse(JSONObject jObject) {
 
 		JSONArray jMessages = null;

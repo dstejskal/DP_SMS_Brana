@@ -1,4 +1,4 @@
-package com.example.dp_sms_brana;
+package com.example.dp_sms_brana.core;
 //Tøída token udržuje stavu tokenu - sdílená promìnná pro celou aplikaci
 public class Token {
 private static String token=null;

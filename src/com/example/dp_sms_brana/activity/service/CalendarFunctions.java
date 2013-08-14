@@ -1,4 +1,4 @@
-package com.example.dp_sms_brana;
+package com.example.dp_sms_brana.activity.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
