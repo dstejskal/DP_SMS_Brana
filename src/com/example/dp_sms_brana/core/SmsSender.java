@@ -20,11 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -33,7 +29,6 @@ import com.example.dp_sms_brana.activity.service.CalendarFunctions;
 import com.example.dp_sms_brana.activity.service.ConnectionInfoActivity;
 import com.example.dp_sms_brana.activity.ui.SettingsActivity;
 import com.example.dp_sms_brana.database.DatabaseHandler;
-import com.example.dp_sms_brana.database.IDatabaseHandler;
 import com.example.dp_sms_brana.entity.Message;
 import com.example.dp_sms_brana.json.JSONfunctions;
 
@@ -46,6 +41,7 @@ public class SmsSender extends AsyncTask<String, Void, String> implements ISmsSe
 
 	public SmsSender(Context context) {
 		this.context = context;
+		running=true;
 	}
 
 	public boolean isRunning() {
@@ -57,13 +53,13 @@ public class SmsSender extends AsyncTask<String, Void, String> implements ISmsSe
 	}
 	
     public void stopTask() {
-    	this.cancel(true); 
+    	running = false;
+    	this.cancel(true);  	
     }
 
 	@Override
 	protected String doInBackground(String... arguments) {
-		running = true;
-		while (true) {
+		while (running==true) {
 			try {
 				// pokud již neodesílám zprávy, zkontroluji, zda nejsou ve frontì nové
 				if (sending == false) 
@@ -83,7 +79,7 @@ public class SmsSender extends AsyncTask<String, Void, String> implements ISmsSe
 				e.printStackTrace();
 			}
 		}
-		// return null;
+		 return null;
 	}
 
 	int MAX_SMS_MESSAGE_LENGTH = 160;
@@ -111,7 +107,7 @@ public class SmsSender extends AsyncTask<String, Void, String> implements ISmsSe
 
 	public void sendNewSms() throws ParseException {
 
-		IDatabaseHandler databaseHandler = new DatabaseHandler(this.context);
+		DatabaseHandler databaseHandler = new DatabaseHandler(this.context);
 
 		// pokud je dostupné pøipojení k internetu, stáhnu nová data
 		if (ConnectionInfoActivity.isConnected(context)) { 
@@ -149,7 +145,7 @@ public class SmsSender extends AsyncTask<String, Void, String> implements ISmsSe
 					
 					if (sendDate != "null" && sendDate != null && sendDate!="") {
 						// SMS s naplánovaným èasem odesláním
-						boolean send=CalendarFunctions.readyToSend(sendDate);
+
 						if (CalendarFunctions.readyToSend(sendDate)) {
 							sendSms(e.getString("phone"), normalizedText);
 							updateSmsStatus(e.getInt("id"),e.getInt("id_user"));
@@ -163,6 +159,10 @@ public class SmsSender extends AsyncTask<String, Void, String> implements ISmsSe
 						}
 					} else{
 						sendSms(e.getString("phone"), normalizedText);
+						String phone=e.getString("phone");
+						int id=e.getInt("id");
+						int user=e.getInt("id_user");
+						
 						updateSmsStatus(e.getInt("id"),e.getInt("id_user"));	
 						
 						message = new com.example.dp_sms_brana.entity.Message((long) e.getInt("id"),
@@ -237,6 +237,7 @@ public class SmsSender extends AsyncTask<String, Void, String> implements ISmsSe
 
 	}
 
+
 	public static String removeDiacritics(String s) {
 		return Normalizer.normalize(s, Normalizer.Form.NFD).replaceAll(
 				"\\p{InCombiningDiacriticalMarks}+", "");
@@ -245,13 +246,14 @@ public class SmsSender extends AsyncTask<String, Void, String> implements ISmsSe
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
-		execute("");
+	execute("");
 	}
 
 	@Override
 	public void stop() {
 		// TODO Auto-generated method stub
-	cancel(true);	
+	this.stopTask();
+	cancel(true);
 	}
 
 }

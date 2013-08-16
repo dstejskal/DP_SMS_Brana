@@ -8,7 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DataJSONParser implements JSONParser {
+public class DataJSONParser implements JSONParser{
 
 	/* (non-Javadoc)
 	 * @see com.example.dp_sms_brana.json.JSONParser#parse(org.json.JSONObject)

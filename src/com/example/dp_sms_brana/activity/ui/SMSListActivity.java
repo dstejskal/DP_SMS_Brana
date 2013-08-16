@@ -6,24 +6,17 @@ import java.util.List;
 import org.json.JSONObject;
 
 import com.example.dp_sms_brana.R;
-import com.example.dp_sms_brana.R.id;
-import com.example.dp_sms_brana.R.layout;
 import com.example.dp_sms_brana.activity.service.ConnectionInfoActivity;
 import com.example.dp_sms_brana.json.DataJSONParser;
 import com.example.dp_sms_brana.json.JSONParser;
 import com.example.dp_sms_brana.json.JSONfunctions;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
+
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class SMSListActivity extends Activity {
@@ -48,7 +41,8 @@ public class SMSListActivity extends Activity {
 					Log.d("JSON Exception1", e.toString());
 				}
 
-				JSONParser dataJsonParser = new DataJSONParser();
+				//JSONParser dataJsonParser = new DataJSONParser();
+				DataJSONParser dataJsonParser = new DataJSONParser();
 				List<HashMap<String, Object>> message = null;
 
 				try {

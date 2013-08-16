@@ -19,8 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dp_sms_brana.R;
-import com.example.dp_sms_brana.R.id;
-import com.example.dp_sms_brana.R.layout;
 import com.example.dp_sms_brana.activity.service.CalendarFunctions;
 import com.example.dp_sms_brana.database.DatabaseHandler;
 import com.example.dp_sms_brana.database.IDatabaseHandler;

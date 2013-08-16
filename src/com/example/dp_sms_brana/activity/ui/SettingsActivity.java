@@ -1,7 +1,6 @@
 package com.example.dp_sms_brana.activity.ui;
 
 import com.example.dp_sms_brana.R;
-import com.example.dp_sms_brana.R.xml;
 
 import android.app.AlertDialog;
 import android.content.Context;
